@@ -1,0 +1,8 @@
+Updates from each day / commit:
+
+9-27-13:
+- Uploaded game design Plan [pdf]
+- Added some sample images for game
+- I [Alex] don't really care how this document looks, 
+  but maybe we can just add new comments at the top of 
+  the doc so the most recent is on top?
