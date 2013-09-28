@@ -1,5 +1,10 @@
 Updates from each day / commit:
 
+9-28-13(kyle):
+-added player recolored sheet
+-added powerups(custom/recolored)
+-added maptiles(recolored originals)
+
 9-27-13:
 - Uploaded game design Plan [pdf]
 - Added some sample images for game
