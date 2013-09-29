@@ -5,6 +5,7 @@ canvas.style.border = "black 1px solid";
 startup();
 
 var tiles = new Array();
+var players = new Array();
 
 function startup() {  
     if (context) {
@@ -18,13 +19,17 @@ function startup() {
 	imageObj.onload = function() {
 		// (image, x1, y1, wx, wy, offset x, offset y, wx, wy)
 		drawMap1(imageObj);
+		players[0] = new player(1,11);
+		drawPlayer(players[0]);
     };
 	
-	var playerImg = new Image();
+	/*var playerImg = new Image();
 	playerImg.src = getTileSrc('/Player assets/playersheet.jpg');
 	playerImg.onload = function() {
 		drawPlayer(playerImg,1,11);
-	}
+		players[0] = new player(1,11);
+	}*/
+
 }
 
 function getTileSrc(imageSrc) {
@@ -43,6 +48,53 @@ function tile(type,isSolid,isVisible,isDestroyable,isDeadly) {
 	this.isDestroyable=new Boolean(isDestroyable);
 	this.isDeadly=new Boolean(isDeadly);
 }
+
+function getTile(x,y) {
+	var index = (13*y)+x;
+	return tiles[index];
+}
+
+function player(locx, locy) {
+	this.locx = locx;
+	this.locy = locy;
+}
+
+document.addEventListener('keydown', function(event) {
+
+	
+    if(event.keyCode == 37) {
+        var targetTile = getTile(players[0].locx-1, players[0].locy);
+		if(targetTile.isSolid == 0) {
+			drawEmpty(players[0].locx, players[0].locy);
+			players[0].locx--;
+			drawPlayer(players[0]);
+		}	
+    }
+    else if(event.keyCode == 39) {
+		var targetTile = getTile(players[0].locx+1, players[0].locy);
+		if(targetTile.isSolid == 0) {
+			drawEmpty(players[0].locx, players[0].locy);
+			players[0].locx++;
+			drawPlayer(players[0]);
+		}
+    }
+	else if(event.keyCode == 38) {
+		var targetTile = getTile(players[0].locx, players[0].locy-1);
+		if(targetTile.isSolid == 0) {
+			drawEmpty(players[0].locx, players[0].locy);
+			players[0].locy--;
+			drawPlayer(players[0]);
+		}
+	}
+	else if(event.keyCode == 40) {
+		var targetTile = getTile(players[0].locx, players[0].locy+1);
+		if(targetTile.isSolid == 0) {
+			drawEmpty(players[0].locx, players[0].locy);
+			players[0].locy++;
+			drawPlayer(players[0]);
+		}
+	}
+});
 
 function drawMap1(img) {
 	for (var x = 0; x < canvas.width/16; x++) {
@@ -85,6 +137,18 @@ function drawWallTile(img, x, y) {
 	tiles[index] = new tile("wall",1,1,0,0);
 }
 
-function drawPlayer(img,x,y) {
-	context.drawImage(img, 18,1,16,25,x*16,y*16,16,16);
+function drawPlayer(player) {
+	var playerImg = new Image();
+	playerImg.src = getTileSrc('/Player assets/playersheet.jpg');
+	playerImg.onload = function() {
+		context.drawImage(playerImg, 18,1,16,25,player.locx*16,player.locy*16,16,16);
+	}
+}
+
+function drawEmpty(x,y) {
+	var img = new Image();
+	img.src = getTileSrc('/empty.jpg');
+	img.onload = function() {
+		context.drawImage(img, 1, 1, 16, 16, x*16, y*16, 16, 16);
+	}
 }
