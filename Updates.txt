@@ -1,6 +1,14 @@
 Updates from each day / commit:
 
 9-29-13:
+(chris)
+-added 'empty.jpg' (18x18 white squre)
+-Added tile and player classes
+-Added tile array that keeps track of tiles/locations
+-Player is drawn (arbitrary starting location)
+-Arrow keys move player
+
+9-29-13:
 (alex)
 - added 'index.html'
   - includes canvas, title, getting image onto canvas
