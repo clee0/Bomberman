@@ -6,6 +6,7 @@ Updates from each day / commit:
   - includes canvas, title, getting image onto canvas
 - added js file
 - added css file
+- added walls for our map
 
 9-28-13:
 (kyle):
