@@ -1,55 +1,79 @@
 canvas = document.getElementById('gameCanvas');
 context = canvas.getContext('2d');
 
+var tiles = new Array(); // all tiles in game
+var players = new Array();
+var changedTiles = new Array(); // tiles that have been changed
+
+var clock;
+
+var imageObj = new Image();
+
 canvas.style.border = "black 1px solid";
 startup();
 
 function startup() {  
     if (context) {
-    	// 13 x 13 tiles at 16 px each.. We should make this larger probably
+    	// 13 x 13 tiles at 16 px each.. We could make this larger if we want
         canvas.width = "208";
         canvas.height = "208";
     }
 
-    var imageObj = new Image();
+    loadMap1Stuff();
 
+    //use setInteval for game loop?
+    clock = self.setInterval(function() {
+    	console.log('hi');
+    }, 1000);
+}
+
+function stopClock() {
+	clock = clearInterval(clock);
+}
+
+function drawAllTiles() {
+	for (var i = 0; i < gameTiles.length; i++) {
+		gameTiles[i].Draw();
+	}
+}
+
+function loadMap1Stuff() {
+	imageObj.src = "file://localhost/Users/abeaman/Bomberman/images/maptiles/maptiles.jpg";
 	imageObj.onload = function() {
-		// (image, x1, y1, wx, wy, offset x, offset y, wx, wy)
-		drawMap1(imageObj);
-    };
-    imageObj.src = getTileSrc('/maptiles/maptiles.jpg');
+		loadMap1();
+		// (image, x, y, Wx, Wy, offsetX, offsetY, Wx, Wy)
+		// drawMap1(imageObj);
+		// context2.drawImage(imageObj2, 1, 1, 16, 16, x*16, y*16, 16, 16);
+ 	};
 }
 
-function getTileSrc(imageSrc) {
-	index = context.canvas.baseURI.indexOf('index.html');
-	fileName = context.canvas.baseURI.slice(0 , index); // includes final '/' but excludes 'index.html'
-	fileName += 'images/' + imageSrc;
-	return fileName;
-}
-
-function drawMap1(img) {
+function loadMap1() {
 	for (var x = 0; x < canvas.width/16; x++) {
 		for (var y = 0; y < canvas.height/16; y++) {
 			// top or bottom wall:
 			if (y === 0 || y === (canvas.width/16)-1) {
-				drawWallTile(img, x, y);
+				gameTiles.push(new Tile(context, imageObj, 1, 1, 16, 16, x*16, y*16, 16, 16));
+				// drawWallTile(img, x, y);
 			}
 			// for rows with dispersed walls:
 			else if ((y%2) === 0) {
 				if ((x%2) === 0) {
-					drawWallTile(img, x, y);
+					gameTiles.push(new Tile(context, imageObj, 1, 1, 16, 16, x*16, y*16, 16, 16));
+					// drawWallTile(img, x, y);
 				}
 			}
 			// for rows with only side walls:
 			else if ((y%2) != 0) {
 				if (x === 0 || x === (canvas.height/16)-1) {
-					drawWallTile(img, x, y);
+					gameTiles.push(new Tile(context, imageObj, 1, 1, 16, 16, x*16, y*16, 16, 16));
+					// drawWallTile(img, x, y);
 				}
 			}
 		}
 	}
+	drawAllTiles();
 }
 
 function drawWallTile(img, x, y) {
-	context.drawImage(img, 1, 1, 16, 16, x*16, y*16, 16, 16);
+	//context.drawImage(img, 1, 1, 16, 16, x*16, y*16, 16, 16);
 }
