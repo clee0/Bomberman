@@ -39,7 +39,7 @@ function stopClock() {
 	}
  }, 1000);
 
-function startup() {  
+function startup() {
     if (context) {
     	// 13 x 13 tiles at 16 px each.. We could make this larger if we want
         canvas.width = (tiles.length*16).toString();
@@ -78,10 +78,6 @@ function startup() {
 	    var onLoad = function (e) {
 	        e.target.removeEventListener("load", onLoad);
 
-	        // this next line can be removed.
-	        // only here to prove the image was loaded.
-	        document.body.appendChild(e.target);
-
 	        // notify that we're done.
 	        onComplete(items, i);
 	    }
@@ -103,7 +99,6 @@ function startup() {
 function addPlayers() {
 	// add Player 1
 	players[0] = new Player(context, player1Img, 18, 1, 16, 25, 1*16, 1*16, 16, 16);
-	// players.push(new Player(context, player1Img, 18, 1, 16, 25, 1*16, 1*16, 16, 16));
 	drawPlayers();
 }
 
@@ -145,22 +140,38 @@ function loadMap1() {
 	for (var x = 0; x < canvas.width/16; x++) {
 		for (var y = 0; y < canvas.height/16; y++) {
 			// top or bottom wall:
-			if (y === 0 || y === (canvas.width/16)-1) {
+			if (y === 0 || y === (canvas.height/16)-1) {
 				tiles[x][y] = new Tile(context, 'wall', wallImg, 1, 1, 16, 16, x*16, y*16, 16, 16);
 			}
-			// for rows with dispersed walls:
+			// for rows with dispersed strong walls:
 			else if ((y%2) === 0) {
+				// Draws Solid Wall:
 				if ((x%2) === 0) {
 					tiles[x][y] = new Tile(context, 'wall', wallImg, 1, 1, 16, 16, x*16, y*16, 16, 16);
-				} else {
+				}
+				// Draws Destroyable Wall:
+				else if ((y > 2 && y < (canvas.height/16)-3) || (x > 1 && x < (canvas.width/16)-2)) {
+					tiles[x][y] = new Tile(context, 'destroyableWall', wallImg, 18, 1, 16, 16, x*16, y*16, 16, 16);	
+				}
+				// Draws Background Tile:
+				else {
 					tiles[x][y] = new Tile(context, 'empty', emptyImg, 52, 1, 16, 16, x*16, y*16, 16, 16);
 				}
 			}
-			// for rows with only side walls:
+			// for rows with only side strong walls:
 			else if ((y%2) != 0) {
-				if (x === 0 || x === (canvas.height/16)-1) {
+				// Draws Solid Wall:
+				if (x === 0 || x === (canvas.width/16)-1) {
 					tiles[x][y] = new Tile(context, 'wall', wallImg, 1, 1, 16, 16, x*16, y*16, 16, 16);
-				} else {
+				}
+				// Draws Destroyable Wall:
+				else if ((x > 1 && x < (canvas.width/16)-2 && y > 1 && y < (canvas.height/16)-2) || 
+					(x > 2 && x < (canvas.width/16)-3) || 
+					(y > 2 && y < (canvas.height/16)-3)) {
+					tiles[x][y] = new Tile(context, 'destroyableWall', wallImg, 18, 1, 16, 16, x*16, y*16, 16, 16);	
+				} 
+				// Draws Background Tile:
+				else {
 					tiles[x][y] = new Tile(context, 'empty', emptyImg, 52, 1, 16, 16, x*16, y*16, 16, 16);
 				}
 			}
@@ -168,16 +179,6 @@ function loadMap1() {
 	}
 	drawTiles();
 }
-
-// Constructor for tile objects
-// Types: wall, space, explosion
-// function tile(type,isSolid,isVisible,isDestroyable,isDeadly) {
-// 	this.type=type;
-// 	this.isSolid=new Boolean(isSolid);
-// 	this.isVisible=new Boolean(isVisible);
-// 	this.isDestroyable=new Boolean(isDestroyable);
-// 	this.isDeadly=new Boolean(isDeadly);
-// }
 
 function player(locx, locy) {
 	this.locx = locx;
