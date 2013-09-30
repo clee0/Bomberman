@@ -92,7 +92,7 @@ function startup() {
 
 	var items = [player1Img.src = getTileSrc('Player assets/playersheet1.jpg'),
 				 wallImg.src = getTileSrc('maptiles/maptiles.jpg'),
-				 emptyImg.src = getTileSrc('empty.jpg'),
+				 emptyImg.src = getTileSrc('maptiles/maptiles.jpg'),
 				 bombImg.src = getTileSrc('bombs/bombs.jpg')];
 
 	loader(items, loadImage, function() {
@@ -108,7 +108,7 @@ function addPlayers() {
 }
 
 function next() {
-	debugger;
+	// debugger;
 }
 
 function drawPlayers() {
@@ -147,22 +147,22 @@ function loadMap1() {
 		for (var y = 0; y < canvas.height/16; y++) {
 			// top or bottom wall:
 			if (y === 0 || y === (canvas.width/16)-1) {
-				tiles[x][y] = new Tile(context, wallImg, 1, 1, 16, 16, x*16, y*16, 16, 16);
+				tiles[x][y] = new Tile(context, 'wall', wallImg, 1, 1, 16, 16, x*16, y*16, 16, 16);
 			}
 			// for rows with dispersed walls:
 			else if ((y%2) === 0) {
 				if ((x%2) === 0) {
-					tiles[x][y] = new Tile(context, wallImg, 1, 1, 16, 16, x*16, y*16, 16, 16);
+					tiles[x][y] = new Tile(context, 'wall', wallImg, 1, 1, 16, 16, x*16, y*16, 16, 16);
 				} else {
-					tiles[x][y] = new Tile(context, emptyImg, 1, 1, 16, 16, x*16, y*16, 16, 16);
+					tiles[x][y] = new Tile(context, 'empty', emptyImg, 52, 1, 16, 16, x*16, y*16, 16, 16);
 				}
 			}
 			// for rows with only side walls:
 			else if ((y%2) != 0) {
 				if (x === 0 || x === (canvas.height/16)-1) {
-					tiles[x][y] = new Tile(context, wallImg, 1, 1, 16, 16, x*16, y*16, 16, 16);
+					tiles[x][y] = new Tile(context, 'wall', wallImg, 1, 1, 16, 16, x*16, y*16, 16, 16);
 				} else {
-					tiles[x][y] = new Tile(context, emptyImg, 1, 1, 16, 16, x*16, y*16, 16, 16);
+					tiles[x][y] = new Tile(context, 'empty', emptyImg, 52, 1, 16, 16, x*16, y*16, 16, 16);
 				}
 			}
 		}
@@ -180,37 +180,40 @@ function loadMap1() {
 // 	this.isDeadly=new Boolean(isDeadly);
 // }
 
-function getTile(x,y) {
-	var index = (13*y)+x;
-	return tiles[index];
-}
-
 function player(locx, locy) {
 	this.locx = locx;
 	this.locy = locy;
 }
 
 document.addEventListener('keydown', function(event) {
+	var x1 = players[0].X/16; var y1 = players[0].Y/16;
     if(event.keyCode == 37) {
-    	console.log('moving left');
-    	if (checkWall(players[0].X - 16, players[0].Y))
-    	players[0].Move('left');
-		drawPlayers();
+    	if (!checkWall(x1 - 1, y1)) {
+    		tiles[x1][y1].Draw();
+    		players[0].Move('left');
+    		drawPlayers();
+    	}
     }
     else if(event.keyCode == 39) {
-    	console.log('moving right');
-    	players[0].Move('right');
-    	drawPlayers();
+    	if (!checkWall(x1 + 1, y1)) {
+    		tiles[x1][y1].Draw();
+	    	players[0].Move('right');
+	    	drawPlayers();
+	    }
     }
 	else if(event.keyCode == 38) {
-		console.log('moving up');
-		players[0].Move('up');
-		drawPlayers();
+		if (!checkWall(x1, y1 - 1)) {
+			tiles[x1][y1].Draw();
+			players[0].Move('up');
+			drawPlayers();
+		}
 	}
 	else if(event.keyCode == 40) {
-		console.log('moving down');
-		players[0].Move('down');
-		drawPlayers();
+		if (!checkWall(x1, y1 + 1)) {
+			tiles[x1][y1].Draw();
+			players[0].Move('down');
+			drawPlayers();
+		}
 	}
 	// Player 1 bomb key
 	else if(event.keyCode == 16) {
@@ -220,6 +223,8 @@ document.addEventListener('keydown', function(event) {
 });
 
 function checkWall(x, y) {
-	debugger;
-	return 1;
+	if (tiles[x][y].isSolid) {
+		return true;
+	}
+	return false;
 }
