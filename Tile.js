@@ -1,4 +1,4 @@
-Tile = function(ctx, imageObj, imgoffsetx, imgoffsety, imgwx, imgwy, x, y, newWx, newWy)
+Tile = function(ctx, type, imageObj, imgoffsetx, imgoffsety, imgwx, imgwy, x, y, newWx, newWy)
 {
 	// _getTileSrc = function(imageSrc, scope) {
 	// 	index = scope.Context.canvas.baseURI.indexOf('index.html');
@@ -9,11 +9,11 @@ Tile = function(ctx, imageObj, imgoffsetx, imgoffsety, imgwx, imgwy, x, y, newWx
 
 	this.imageObj = imageObj
 	// var X = x, Y = y, Wx = wx, Wy = wy, offsetX = offx, offsetY = offy, newWidthX = newwx, newWidthY = newwy;
-	this.X = x;   this.imgOffsetX = imgoffsetx;
-	this.Y = y;   this.imgOffsetY = imgoffsety;
+	this.X = x;         this.imgOffsetX = imgoffsetx;
+	this.Y = y;         this.imgOffsetY = imgoffsety;
 	this.imgWx = imgwx; this.WidthX = newWx;
 	this.imgWy = imgwy; this.WidthY = newWy;
-	this.Context = ctx;
+	this.Context = ctx; this.Type = type;
 	
 	this.drawable = false;
 
