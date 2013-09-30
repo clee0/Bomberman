@@ -111,8 +111,8 @@ function startup() {
 		emptyImg.src = getTileSrc('maptiles/maptiles.jpg', context),
 		bombImg.src = getTileSrc('bombs/bombs.jpg', context),
 		twoHudImg.src = getTileSrc('Hud/twoplayerhud.png', hudContext),
-		powerupImg.src = getTileSrc('powerups/powerups.jpg', context)
-		twoHud.src = getTileSrc('Hud/twoplayerhud.png', hudContext),
+		powerupImg.src = getTileSrc('powerups/powerups.jpg', context),
+		twoHudImg.src = getTileSrc('Hud/twoplayerhud.png', hudContext),
 		explImg[0].src = getTileSrc('bombs/bombcenter.png', context),
 		explImg[1].src = getTileSrc('bombs/bombend.png', context),
 		explImg[2].src = getTileSrc('bombs/bombmid.png', context),
