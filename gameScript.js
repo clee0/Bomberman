@@ -104,7 +104,7 @@ function startup() {
 	}
 
 	var items = [
-		player1Img.src = getTileSrc('Player assets/playersheet1.jpg', context),
+		player1Img.src = getTileSrc('Player assets/playersheet2.png', context),
 		wallImg.src = getTileSrc('maptiles/maptiles.jpg', context),
 		emptyImg.src = getTileSrc('maptiles/maptiles.jpg', context),
 		bombImg.src = getTileSrc('bombs/bombs.jpg', context),
@@ -126,7 +126,7 @@ function loadHud() {
 
 function addPlayers() {
 	// add Player 1
-	players[0] = new Player(context, player1Img, 18, 1, 16, 25, 1*16, 1*16, 16, 16);
+	players[0] = new Player(context, player1Img, 18, 1, 16, 23, 1*16, 1*16, 16, 16);
 	drawPlayers();
 }
 
