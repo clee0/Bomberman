@@ -34,7 +34,7 @@ function stopClock() {
 		}
 		else {
 			bombs[i].countdown();
-			bombs[i].draw();
+			//bombs[i].draw();
 		}
 	}
  }, 1000);
@@ -125,8 +125,13 @@ function drawTiles() {
 }
 
 function dropBomb(player) {
-	bombs[bombs.length] = new Bomb(bombImg, 0, 0, 14, 18, 16, 16, player);
-	bombs[bombs.length-1].draw();
+	tempBomb = new Bomb(bombImg, 0, 0, 14, 18, 16, 16, player);
+	bombs[bombs.length] = tempBomb;
+	tiles[tempBomb.x/16][tempBomb.y/16] = new Tile(context, 'bomb', bombImg, 0, 0, 14, 18, tempBomb.x, tempBomb.y, 16, 16);
+}
+
+function explodeBomb(bomb) {
+	
 }
 
 function getTileSrc(imageSrc) {
