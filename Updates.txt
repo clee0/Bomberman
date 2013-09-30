@@ -1,5 +1,11 @@
 Updates from each day / commit:
 
+9-30-13:
+(alex)
+- made function called 'createPowerup()'
+  - It contains a useful way of making new timers associated w/ each individual powerup
+  - This may be useful for bomb dropping too.
+
 9-29-13:
 (alex)
 -changed 'empty.jpg' to new color so it can be seen.
