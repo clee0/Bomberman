@@ -30,9 +30,15 @@ for (var i = 0; i < 13; i++) {
 }
 var players = new Array();
 var bombs = new Array();
-var powerups = new Array();
+
+// object for making clocks so powerups can have different clocks at different references
+var powclock = {
+	Index: 0
+};
 
 startup();
+
+// TODO: give names to players so we know who wins at the end?
 
 function stopClock() {
 	clock = clearInterval(clock);
@@ -119,7 +125,6 @@ function startup() {
 	];
 
 	loader(items, loadImage, function() {
-		
 		loadHud();
 		loadMap1();
 		makeFakePowerup();
@@ -127,12 +132,23 @@ function startup() {
 }
 
 function makeFakePowerup() {
-	powerups.push(new Powerup(context, 'extra-bomb', powerupImg, 3, 3, 16, 16, 1*16, 2*16, 16, 16, tiles[1][2]));
-	powerups[0].Draw();
+	tiles[1][2] = new Tile(context, 'extra-bomb', powerupImg, 3, 3, 16, 16, 1*16, 2*16, 16, 16, powclock.Index);
+	tiles[1][2].Draw();
 
-	var powclock = setInterval(function() {
-		powerups[0].shiftImg();
-	}, 310);
+	var Name = 'powClock' + powclock.Index;
+	++powclock.Index;
+	powclock[Name] = setInterval(function() {
+		tiles[1][2].shiftImg();
+	}, 400);
+
+	tiles[2][1] = new Tile(context, 'extra-bomb', powerupImg, 3, 3, 16, 16, 2*16, 1*16, 16, 16, powclock.Index);
+	tiles[2][1].Draw();
+
+	var Name = 'powClock' + powclock.Index;
+	++powclock.Index;
+	powclock[Name] = setInterval(function() {
+		tiles[2][1].shiftImg();
+	}, 400);	
 }
 
 function loadHud() {
@@ -309,6 +325,7 @@ document.addEventListener('keydown', function(event) {
     	if (!checkWall(x1 - 1, y1)) {
     		tiles[x1][y1].Draw();
     		p1.Move('left');
+    		checkPickup(p1);
     		drawPlayers();
     	}
     }
@@ -316,6 +333,7 @@ document.addEventListener('keydown', function(event) {
     	if (!checkWall(x1 + 1, y1)) {
     		tiles[x1][y1].Draw();
 	    	p1.Move('right');
+	    	checkPickup(p1);
 	    	drawPlayers();
 	    }
     }
@@ -323,7 +341,7 @@ document.addEventListener('keydown', function(event) {
 		if (!checkWall(x1, y1 - 1)) {
 			tiles[x1][y1].Draw();
 			p1.Move('up');
-			// checkPickup(players[0]);
+			checkPickup(p1);
 			drawPlayers();
 		}
 	}
@@ -331,14 +349,28 @@ document.addEventListener('keydown', function(event) {
 		if (!checkWall(x1, y1 + 1)) {
 			tiles[x1][y1].Draw();
 			p1.Move('down');
+			checkPickup(p1);
 			drawPlayers();
 		}
 	}
 	// Player 1 bomb key
 	else if(event.keyCode == 16) {
-		dropBomb(players[0]);
+		dropBomb(p1);
 	}
 });
+
+function checkPickup(player) {
+	var x = player.X/16, y = player.Y/16;
+	if (tiles[x][y].Type === 'extra-bomb') {
+		console.log(player.bombCount);
+		++player.bombCount;
+		clearInterval(powclock['powClock' + tiles[x][y].powerupClockIndex]);
+		tiles[x][y] = new Tile(context, 'empty', emptyImg, 52, 1, 16, 16, player.X, player.Y, 16, 16);
+		tiles[x][y].Draw();
+		player.Draw();
+		console.log(player.bombCount);
+	}
+}
 
 function checkWall(x, y) {
 	if (tiles[x][y].isSolid) {

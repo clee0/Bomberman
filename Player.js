@@ -15,6 +15,7 @@ Player = function(ctx, imageObj, imgoffsetx, imgoffsety, imgwx, imgwy, x, y, new
 	this.imgWy = imgwy; this.WidthY = newWy;
 	this.Context = ctx;
 	
+	this.bombCount = 1;
 	this.bombSize = bombSize;
 	this.canRemoteDetonate = new Boolean(canRemoteDetonate);
 	

@@ -7,3 +7,13 @@ canvas {
 	margin-top: -5px;
 	display: inline;
 }
+
+div#dialog{
+    width: 100%;
+    text-align: center;
+    background-color: #FFFFFF;
+}
+
+.ui-dialog-titlebar{
+	background-color: #FFFFFF;
+}
