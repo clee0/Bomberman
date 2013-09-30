@@ -7,7 +7,7 @@ Tile = function(ctx, type, imageObj, imgoffsetx, imgoffsety, imgwx, imgwy, x, y,
 	// 	return fileName;
 	// };
 
-	if (type === 'wall') {
+	if (type === 'wall' || type === 'destroyableWall') {
 		this.isSolid = true;
 	} else {
 		this.isSolid = false;
