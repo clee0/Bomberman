@@ -8,7 +8,7 @@ var changedTiles = new Array(); // tiles that have been changed
 var clock;
 
 var wallImg = new Image();
-var playerImg = new Image();
+var player1Img = new Image();
 var emptyImg = new Image();
 
 canvas.style.border = "black 1px solid";
@@ -71,7 +71,8 @@ function startup() {
 	    img.addEventListener("load", onLoad, false);
 	    img.src = items[i];
 	}
-	var items = [playerImg.src = getTileSrc('Player assets/playersheet.jpg'),
+
+	var items = [player1Img.src = getTileSrc('Player assets/playersheet.jpg'),
 				 wallImg.src = getTileSrc('maptiles/maptiles.jpg'),
 				 emptyImg.src = getTileSrc('empty.jpg')];
 
@@ -80,33 +81,36 @@ function startup() {
 	});
 }
 
-function next() {
-	// imageObj.src = getTileSrc('/maptiles/maptiles.jpg');
-	// imageObj.onload = function() {
-	// 	// (image, x1, y1, wx, wy, offset x, offset y, wx, wy)
-	// 	drawMap1(imageObj);
-		players[0] = new player(1,11);
-		drawPlayer(players[0]);
-    // };
+function addPlayers() {
+	// add Player 1
+	players[0] = new Player(context, player1Img, 18, 1, 16, 25, 1*16, 1*16, 16, 16);
+	// players.push(new Player(context, player1Img, 18, 1, 16, 25, 1*16, 1*16, 16, 16));
+	drawPlayers();
 
     //use setInteval for game loop?
-    clock = self.setInterval(function() {
-    	console.log('looping');
-    }, 250);
-	
-	/*var playerImg = new Image();
-	playerImg.src = getTileSrc('/Player assets/playersheet.jpg');
-	playerImg.onload = function() {
-		drawPlayer(playerImg,1,11);
-		players[0] = new player(1,11);
-	}*/
+    // clock = self.setInterval(function() {
+    // 	console.log('looping');
+    // }, 250);
+}
+
+function next() {
+	debugger;
+}
+
+function drawPlayers() {
+	if (players.length != 'undefined') {
+		for (var i = 0; i < players.length; i++) {
+			players[i].Draw();
+		}
+	}
+	next();
 }
 
 function drawTiles() {
 	for (var i = 0; i < tiles.length; i++) {
 		tiles[i].Draw();
 	}
-	next();
+	addPlayers();
 }
 
 function getTileSrc(imageSrc) {
@@ -164,75 +168,42 @@ function player(locx, locy) {
 	this.locy = locy;
 }
 
-document.addEventListener('keydown', function(event) {
+/*document.addEventListener('keydown', function(event) {
     if(event.keyCode == 37) {
-        var targetTile = getTile(players[0].locx-1, players[0].locy);
-		if(targetTile.isSolid == 0) {
-			drawEmpty(players[0].locx, players[0].locy);
-			players[0].locx--;
-			drawPlayer(players[0]);
-		}	
+    	console.log('moving left');
+    	players[0].Move('left');
+  		// var targetTile = getTile(players[0].locx-1, players[0].locy);
+		// if (targetTile.isSolid == 0) {
+		// 	drawEmpty(players[0].locx, players[0].locy);
+		// 	players[0].locx--;
+		// 	drawPlayer(players[0]);
+		// }	
     }
     else if(event.keyCode == 39) {
-		var targetTile = getTile(players[0].locx+1, players[0].locy);
-		if(targetTile.isSolid == 0) {
-			drawEmpty(players[0].locx, players[0].locy);
-			players[0].locx++;
-			drawPlayer(players[0]);
-		}
+    	console.log('moving right');
+    	players[0].Move('right');
+		// var targetTile = getTile(players[0].locx+1, players[0].locy);
+		// if (targetTile.isSolid == 0) {
+		// 	players[0].locx++;
+		// 	drawPlayer(players[0]);
+		// }
     }
 	else if(event.keyCode == 38) {
-		var targetTile = getTile(players[0].locx, players[0].locy-1);
-		if(targetTile.isSolid == 0) {
-			drawEmpty(players[0].locx, players[0].locy);
-			players[0].locy--;
-			drawPlayer(players[0]);
-		}
+		console.log('moving up');
+		players[0].Move('up');
+		// var targetTile = getTile(players[0].locx, players[0].locy-1);
+		// if (targetTile.isSolid == 0) {
+		// 	players[0].locy--;
+		// 	drawPlayer(players[0]);
+		// }
 	}
 	else if(event.keyCode == 40) {
-		var targetTile = getTile(players[0].locx, players[0].locy+1);
-		if(targetTile.isSolid == 0) {
-			drawEmpty(players[0].locx, players[0].locy);
-			players[0].locy++;
-			drawPlayer(players[0]);
-		}
+		console.log('moving down');
+		player[0].Move('down');
+		// var targetTile = getTile(players[0].locx, players[0].locy+1);
+		// if (targetTile.isSolid == 0) {
+		// 	players[0].locy++;
+		// 	drawPlayer(players[0]);
+		// }
 	}
-});
-
-// function drawSpaceTile(img, x, y) {
-// 	//context.drawImage(img, 1, 1, 16, 16, x*16, y*16, 16, 16);
-	
-// 	// Fill in all non-walls with a "space" tile
-// 	for (var y = 0; y < canvas.height/16; y++) {
-// 		for (var x = 0; x < canvas.width/16; x++) {
-// 			var index = (13*y)+x;
-// 			if(tiles[index] == null) {
-// 				tiles[index] = new tile("space",0,1,0,0);
-// 			}
-// 		}
-// 	}
-// }
-
-// function drawWallTile(img, x, y) {
-// 	context.drawImage(img, 1, 1, 16, 16, x*16, y*16, 16, 16);
-	
-// 	// Create a "wall" tile at this location
-// 	var index = (13*y)+x;
-// 	tiles[index] = new tile("wall",1,1,0,0);
-// }
-
-function drawPlayer(player) {
-	var playerImg = new Image();
-	playerImg.src = getTileSrc('/Player assets/playersheet.jpg');
-	playerImg.onload = function() {
-		context.drawImage(playerImg, 18,1,16,25,player.locx*16,player.locy*16,16,16);
-	}
-}
-
-function drawEmpty(x,y) {
-	var img = new Image();
-	img.src = getTileSrc('/empty.jpg');
-	img.onload = function() {
-		context.drawImage(img, 1, 1, 16, 16, x*16, y*16, 16, 16);
-	}
-}
+});*/
