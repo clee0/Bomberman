@@ -210,8 +210,8 @@ function explodeBomb(bomb) {
 	// TODO: Rotate explosion images
 	for(var i = 1; i <= bomb.player.bombSize - 1; i++) {
 		if(!hitRight) {
-			if(tiles[locx+i][locy].isSolid) {
-				tiles[locx+i][locy] = new Tile(context, 'explosion', explImg[1], 0, 2, 12, 12, bomb.x-(16*i), bomb.y, 16, 16);
+			if(!tiles[locx+i][locy].isSolid) {
+				tiles[locx+i][locy] = new Tile(context, 'explosion', explImg[1], 0, 2, 12, 12, bomb.x+(16*i), bomb.y, 16, 16);
 				tiles[locx+i][locy].Draw();
 				explosionTiles.push(tiles[locx+i][locy]);
 			}
@@ -223,8 +223,8 @@ function explodeBomb(bomb) {
 			}
 		}
 		if(!hitLeft) {
-			if(tiles[locx-i][locy].isSolid) {
-				tiles[locx-i][locy] = new Tile(context, 'explosion', explImg[1], 0, 2, 12, 12, bomb.x+(16*i), bomb.y, 16, 16);
+			if(!tiles[locx-i][locy].isSolid) {
+				tiles[locx-i][locy] = new Tile(context, 'explosion', explImg[1], 0, 2, 12, 12, bomb.x-(16*i), bomb.y, 16, 16);
 				tiles[locx-i][locy].Draw();
 				explosionTiles.push(tiles[locx-i][locy]);
 			}
@@ -236,8 +236,8 @@ function explodeBomb(bomb) {
 			}
 		}
 		if(!hitUp) {
-			if(tiles[locx][locy-i].isSolid) {
-				tiles[locx][locy-i] = new Tile(context, 'explosion', explImg[1], 0, 2, 12, 12, bomb.x, bomb.y+(16*i), 16, 16);
+			if(!tiles[locx][locy-i].isSolid) {
+				tiles[locx][locy-i] = new Tile(context, 'explosion', explImg[1], 0, 2, 12, 12, bomb.x, bomb.y-(16*i), 16, 16);
 				tiles[locx][locy-i].Draw();
 				explosionTiles.push(tiles[locx][locy-i]);
 			}
@@ -249,8 +249,8 @@ function explodeBomb(bomb) {
 			}
 		}
 		if(!hitDown) {
-			if(tiles[locx][locy+i].isSolid) {
-				tiles[locx][locy+i] = new Tile(context, 'explosion', explImg[1], 0, 2, 12, 12, bomb.x, bomb.y-(16*i), 16, 16);
+			if(!tiles[locx][locy+i].isSolid) {
+				tiles[locx][locy+i] = new Tile(context, 'explosion', explImg[1], 0, 2, 12, 12, bomb.x, bomb.y+(16*i), 16, 16);
 				tiles[locx][locy+i].Draw();
 				explosionTiles.push(tiles[locx][locy+i]);
 			}
@@ -265,8 +265,8 @@ function explodeBomb(bomb) {
 	
 	setTimeout(function() {
 		for(var i = 0; i < explosionTiles.length; i++) {
-			explosionTiles[i] = new Tile(context, 'empty', emptyImg, 52, 1, 16, 16, explosionTiles[i].X, explosionTiles[i].Y, 16, 16);
-			explosionTiles[i].Draw();
+			tiles[explosionTiles[i].X/16][explosionTiles[i].Y/16] = new Tile(context, 'empty', emptyImg, 52, 1, 16, 16, explosionTiles[i].X, explosionTiles[i].Y, 16, 16);
+			tiles[explosionTiles[i].X/16][explosionTiles[i].Y/16].Draw();
 		}
 	}
 	,1000);
