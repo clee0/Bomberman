@@ -4,12 +4,6 @@ context = canvas.getContext('2d');
 hudCanvas = document.getElementById('hudCanvas');
 hudContext = hudCanvas.getContext('2d');
 
-var tiles = new Array(13); // all tiles in game
-
-for (var i = 0; i < 13; i++) {
-	tiles[i] = new Array(13);
-}
-
 var changedTiles = new Array(); // tiles that have been changed
 
 var clock;
@@ -18,7 +12,8 @@ var wallImg = new Image();
 var player1Img = new Image();
 var emptyImg = new Image();
 var bombImg = new Image();
-var twoHud = new Image();
+var twoHudImg = new Image();
+var powerupImg = new Image();
 
 var explImg = new Array();
 explImg[0] = new Image();
@@ -27,10 +22,17 @@ explImg[2] = new Image();
 
 canvas.style.border = "black 1px solid";
 hudCanvas.style.border = "black 1px solid";
-startup();
 
+var tiles = new Array(13); // all tiles in game
+
+for (var i = 0; i < 13; i++) {
+	tiles[i] = new Array(13);
+}
 var players = new Array();
 var bombs = new Array();
+var powerups = new Array();
+
+startup();
 
 function stopClock() {
 	clock = clearInterval(clock);
@@ -108,20 +110,33 @@ function startup() {
 		wallImg.src = getTileSrc('maptiles/maptiles.jpg', context),
 		emptyImg.src = getTileSrc('maptiles/maptiles.jpg', context),
 		bombImg.src = getTileSrc('bombs/bombs.jpg', context),
-		twoHud.src = getTileSrc('Hud/twoplayerhud.png', hudContext),
+		twoHudImg.src = getTileSrc('Hud/twoplayerhud.png', hudContext),
+		powerupImg.src = getTileSrc('powerups/powerups.jpg', context),
+		twoHudImg.src = getTileSrc('Hud/twoplayerhud.png', hudContext),
 		explImg[0].src = getTileSrc('bombs/bombcenter.png', context),
 		explImg[1].src = getTileSrc('bombs/bombmid.png', context),
 		explImg[2].src = getTileSrc('bombs/bombend.png', context),
 	];
 
 	loader(items, loadImage, function() {
+		
 		loadHud();
 		loadMap1();
+		makeFakePowerup();
 	});
 }
 
+function makeFakePowerup() {
+	powerups.push(new Powerup(context, 'extra-bomb', powerupImg, 3, 3, 16, 16, 1*16, 2*16, 16, 16, tiles[1][2]));
+	powerups[0].Draw();
+
+	var powclock = setInterval(function() {
+		powerups[0].shiftImg();
+	}, 310);
+}
+
 function loadHud() {
-	hudContext.drawImage(twoHud, 0, 0, 256, 32, 0, 0, 256,32);
+	hudContext.drawImage(twoHudImg, 0, 0, 256, 32, 0, 0, 256,32);
 }
 
 function addPlayers() {
@@ -288,32 +303,34 @@ function player(locx, locy) {
 }
 
 document.addEventListener('keydown', function(event) {
-	var x1 = players[0].X/16; var y1 = players[0].Y/16;
+	var p1 = players[0];
+	var x1 = p1.X/16; var y1 = p1.Y/16;
     if(event.keyCode == 37) {
     	if (!checkWall(x1 - 1, y1)) {
     		tiles[x1][y1].Draw();
-    		players[0].Move('left');
+    		p1.Move('left');
     		drawPlayers();
     	}
     }
     else if(event.keyCode == 39) {
     	if (!checkWall(x1 + 1, y1)) {
     		tiles[x1][y1].Draw();
-	    	players[0].Move('right');
+	    	p1.Move('right');
 	    	drawPlayers();
 	    }
     }
 	else if(event.keyCode == 38) {
 		if (!checkWall(x1, y1 - 1)) {
 			tiles[x1][y1].Draw();
-			players[0].Move('up');
+			p1.Move('up');
+			// checkPickup(players[0]);
 			drawPlayers();
 		}
 	}
 	else if(event.keyCode == 40) {
 		if (!checkWall(x1, y1 + 1)) {
 			tiles[x1][y1].Draw();
-			players[0].Move('down');
+			p1.Move('down');
 			drawPlayers();
 		}
 	}
