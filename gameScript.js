@@ -33,8 +33,8 @@ function stopClock() {
 			// TODO: Call function to explode bomb
 		}
 		else {
-			bombs[i].countdown;
-			bombs[i].draw;
+			bombs[i].countdown();
+			bombs[i].draw();
 		}
 	}
  }, 1000);
@@ -130,9 +130,8 @@ function drawTiles() {
 }
 
 function dropBomb(player) {
-	var img = new image();
-	img.src = 
-	bombs[bombs.length] = new Bomb(bombImg, 1, 1, 16, 16, 16, 16, player);
+	bombs[bombs.length] = new Bomb(bombImg, 0, 0, 14, 18, 16, 16, player);
+	bombs[bombs.length-1].draw();
 }
 
 function getTileSrc(imageSrc) {
@@ -217,7 +216,6 @@ document.addEventListener('keydown', function(event) {
 	}
 	// Player 1 bomb key
 	else if(event.keyCode == 16) {
-		alert('asdf');
 		dropBomb(players[0]);
 	}
 });
