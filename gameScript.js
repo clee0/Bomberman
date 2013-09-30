@@ -42,7 +42,7 @@ function stopClock() {
 		if(bombs[i].hasExploded) {
 			// TODO: Call function to explode bomb
 			explodeBomb(bombs[i]);
-			
+			bombs.splice(i,1);
 		}
 		else {
 			bombs[i].countdown();
@@ -110,8 +110,8 @@ function startup() {
 		bombImg.src = getTileSrc('bombs/bombs.jpg', context),
 		twoHud.src = getTileSrc('Hud/twoplayerhud.png', hudContext),
 		explImg[0].src = getTileSrc('bombs/bombcenter.png', context),
-		explImg[1].src = getTileSrc('bombs/bombend.png', context),
-		explImg[2].src = getTileSrc('bombs/bombmid.png', context),
+		explImg[1].src = getTileSrc('bombs/bombmid.png', context),
+		explImg[2].src = getTileSrc('bombs/bombend.png', context),
 	];
 
 	loader(items, loadImage, function() {
@@ -126,7 +126,7 @@ function loadHud() {
 
 function addPlayers() {
 	// add Player 1
-	players[0] = new Player(context, player1Img, 18, 1, 16, 23, 1*16, 1*16, 16, 16);
+	players[0] = new Player(context, player1Img, 18, 1, 16, 23, 1*16, 1*16, 16, 16, 2, 3, false);
 	drawPlayers();
 }
 
@@ -157,10 +157,78 @@ function dropBomb(player) {
 	bombs[bombs.length] = tempBomb;
 	tiles[tempBomb.x/16][tempBomb.y/16] = new Tile(context, 'bomb', bombImg, 0, 0, 14, 18, tempBomb.x, tempBomb.y, 16, 16);
 }
-
+	
 function explodeBomb(bomb) {
-	tiles[bomb.x/16][bomb.y/16] = new Tile(context, 'explosion', explImg[0], 0, 2, 12, 12, bomb.x, bomb.y, 16, 16);
-	tiles[bomb.x/16][bomb.y/16].Draw();
+	var locx = bomb.x/16;
+	var locy = bomb.y/16;
+	var explosionTiles = new Array();
+	tiles[locx][locy] = new Tile(context, 'explosion', explImg[0], 0, 2, 12, 12, bomb.x, bomb.y, 16, 16);
+	tiles[locx][locy].Draw();
+	explosionTiles.push(tiles[locx][locy]);
+	var hitLeft = false; var hitRight = false; var hitUp = false; var hitDown = false;
+	// TODO: Rotate explosion images
+	for(var i = 1; i <= bomb.player.bombSize - 1; i++) {
+		if(!hitRight) {
+			if(tiles[locx+i][locy].isSolid) {
+				tiles[locx+i][locy] = new Tile(context, 'explosion', explImg[1], 0, 2, 12, 12, bomb.x-(16*i), bomb.y, 16, 16);
+				tiles[locx+i][locy].Draw();
+				explosionTiles.push(tiles[locx+i][locy]);
+			}
+			else {
+				if(tiles[locx+i][locy].type == 'destroyableWall') {
+					// TODO: destroy the wall
+				}
+				hitRight = true;
+			}
+		}
+		if(!hitLeft) {
+			if(tiles[locx-i][locy].isSolid) {
+				tiles[locx-i][locy] = new Tile(context, 'explosion', explImg[1], 0, 2, 12, 12, bomb.x+(16*i), bomb.y, 16, 16);
+				tiles[locx-i][locy].Draw();
+				explosionTiles.push(tiles[locx-i][locy]);
+			}
+			else {
+				if(tiles[locx-i][locy].type == 'destroyableWall') {
+					// TODO: destroy the wall
+				}
+				hitLeft = true;
+			}
+		}
+		if(!hitUp) {
+			if(tiles[locx][locy-i].isSolid) {
+				tiles[locx][locy-i] = new Tile(context, 'explosion', explImg[1], 0, 2, 12, 12, bomb.x, bomb.y+(16*i), 16, 16);
+				tiles[locx][locy-i].Draw();
+				explosionTiles.push(tiles[locx][locy-i]);
+			}
+			else {
+				if(tiles[locx][locy-i].type == 'destroyableWall') {
+					// TODO: destroy the wall
+				}
+				hitUp = true;
+			}
+		}
+		if(!hitDown) {
+			if(tiles[locx][locy+i].isSolid) {
+				tiles[locx][locy+i] = new Tile(context, 'explosion', explImg[1], 0, 2, 12, 12, bomb.x, bomb.y-(16*i), 16, 16);
+				tiles[locx][locy+i].Draw();
+				explosionTiles.push(tiles[locx][locy+i]);
+			}
+			else {
+				if(tiles[locx][locy+i].type == 'destroyableWall') {
+					// TODO: destroy the wall
+				}
+				hitDown = true;
+			}
+		}
+	}
+	
+	setTimeout(function() {
+		for(var i = 0; i < explosionTiles.length; i++) {
+			explosionTiles[i] = new Tile(context, 'empty', emptyImg, 52, 1, 16, 16, explosionTiles[i].X, explosionTiles[i].Y, 16, 16);
+			explosionTiles[i].Draw();
+		}
+	}
+	,1000);
 }
 
 function getTileSrc(imageSrc, ctx) {

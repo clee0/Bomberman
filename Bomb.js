@@ -1,6 +1,7 @@
 Bomb = function(imgObj, imgoffsetx, imgoffsety, imgwx, imgwy, newWx, newWy, player) {
 	
 	this.imgObj = imgObj;
+	this.player = player;
 	// var X = x, Y = y, Wx = wx, Wy = wy, offsetX = offx, offsetY = offy, newWidthX = newwx, newWidthY = newwy;
 	this.x = player.X;   this.imgOffsetX = imgoffsetx;
 	this.y = player.Y;   this.imgOffsetY = imgoffsety;
