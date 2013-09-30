@@ -7,7 +7,9 @@ var changedTiles = new Array(); // tiles that have been changed
 
 var clock;
 
-var wallObj = new Image();
+var wallImg = new Image();
+var playerImg = new Image();
+var emptyImg = new Image();
 
 canvas.style.border = "black 1px solid";
 startup();
@@ -26,9 +28,59 @@ function startup() {
         canvas.height = "208";
     }
 
-    // new setup:
-    loadMap1Stuff();
+    // load images before anything else.
+	function loader(items, thingToDo, allDone) {
+	    if (!items) {
+	        // nothing to do.
+	        return;
+	    }
 
+	    if ("undefined" === items.length) {
+	        // convert single item to array.
+	        items = [items];
+	    }
+
+	    var count = items.length;
+
+	    // this callback counts down the things to do.
+	    var thingToDoCompleted = function (items, i) {
+	        count--;
+	        if (0 == count) {
+	            allDone(items);
+	        }
+	    };
+
+	    for (var i = 0; i < items.length; i++) {
+	        // 'do' each thing, and await callback.
+	        thingToDo(items, i, thingToDoCompleted);
+	    }
+	}
+
+	function loadImage(items, i, onComplete) {
+	    var onLoad = function (e) {
+	        e.target.removeEventListener("load", onLoad);
+
+	        // this next line can be removed.
+	        // only here to prove the image was loaded.
+	        document.body.appendChild(e.target);
+
+	        // notify that we're done.
+	        onComplete(items, i);
+	    }
+	    var img = new Image();
+	    img.addEventListener("load", onLoad, false);
+	    img.src = items[i];
+	}
+	var items = [playerImg.src = getTileSrc('Player assets/playersheet.jpg'),
+				 wallImg.src = getTileSrc('maptiles/maptiles.jpg'),
+				 emptyImg.src = getTileSrc('empty.jpg')];
+
+	loader(items, loadImage, function() {
+		loadMap1();
+	});
+}
+
+function next() {
 	// imageObj.src = getTileSrc('/maptiles/maptiles.jpg');
 	// imageObj.onload = function() {
 	// 	// (image, x1, y1, wx, wy, offset x, offset y, wx, wy)
@@ -39,8 +91,8 @@ function startup() {
 
     //use setInteval for game loop?
     clock = self.setInterval(function() {
-    	console.log('hi');
-    }, 1000);
+    	console.log('looping');
+    }, 250);
 	
 	/*var playerImg = new Image();
 	playerImg.src = getTileSrc('/Player assets/playersheet.jpg');
@@ -50,24 +102,15 @@ function startup() {
 	}*/
 }
 
-function drawAllTiles() {
+function drawTiles() {
 	for (var i = 0; i < tiles.length; i++) {
 		tiles[i].Draw();
 	}
-}
-
-function loadMap1Stuff() {
-	wallObj.src = "file://localhost/Users/abeaman/Bomberman/images/maptiles/maptiles.jpg";
-	wallObj.onload = function() {
-		loadMap1();
-		// (image, x, y, Wx, Wy, offsetX, offsetY, Wx, Wy)
-		// drawMap1(imageObj);
-		// context2.drawImage(imageObj2, 1, 1, 16, 16, x*16, y*16, 16, 16);
- 	};
+	next();
 }
 
 function getTileSrc(imageSrc) {
-	index = context.canvas.baseURI.indexOf('index.html');
+	var index = context.canvas.baseURI.indexOf('index.html');
 	fileName = context.canvas.baseURI.slice(0 , index); // includes final '/' but excludes 'index.html'
 	fileName += 'images/' + imageSrc;
 	return fileName;
@@ -78,26 +121,27 @@ function loadMap1() {
 		for (var y = 0; y < canvas.height/16; y++) {
 			// top or bottom wall:
 			if (y === 0 || y === (canvas.width/16)-1) {
-				tiles.push(new Tile(context, wallObj, 1, 1, 16, 16, x*16, y*16, 16, 16));
-				// drawWallTile(img, x, y);
+				tiles.push(new Tile(context, wallImg, 1, 1, 16, 16, x*16, y*16, 16, 16));
 			}
 			// for rows with dispersed walls:
 			else if ((y%2) === 0) {
 				if ((x%2) === 0) {
-					tiles.push(new Tile(context, wallObj, 1, 1, 16, 16, x*16, y*16, 16, 16));
-					// drawWallTile(img, x, y);
+					tiles.push(new Tile(context, wallImg, 1, 1, 16, 16, x*16, y*16, 16, 16));
+				} else {
+					tiles.push(new Tile(context, emptyImg, 1, 1, 16, 16, x*16, y*16, 16, 16));
 				}
 			}
 			// for rows with only side walls:
 			else if ((y%2) != 0) {
 				if (x === 0 || x === (canvas.height/16)-1) {
-					tiles.push(new Tile(context, wallObj, 1, 1, 16, 16, x*16, y*16, 16, 16));
-					// drawWallTile(img, x, y);
+					tiles.push(new Tile(context, wallImg, 1, 1, 16, 16, x*16, y*16, 16, 16));
+				} else {
+					tiles.push(new Tile(context, emptyImg, 1, 1, 16, 16, x*16, y*16, 16, 16));
 				}
 			}
 		}
 	}
-	drawAllTiles();
+	drawTiles();
 }
 
 // Constructor for tile objects
