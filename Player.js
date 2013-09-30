@@ -1,4 +1,4 @@
-Player = function(ctx, imageObj, imgoffsetx, imgoffsety, imgwx, imgwy, x, y, newWx, newWy, bombSize, bombTime, canRemoteDetonate)
+Player = function(ctx, imageObj, imgoffsetx, imgoffsety, imgwx, imgwy, x, y, newWx, newWy)
 {
 	this.X = x;          this.imgOffsetX = imgoffsetx;
 	this.Y = y;          this.imgOffsetY = imgoffsety;
@@ -6,9 +6,11 @@ Player = function(ctx, imageObj, imgoffsetx, imgoffsety, imgwx, imgwy, x, y, new
 	this.imgWy = imgwy;  this.WidthY = newWy;
 	this.Context = ctx;  this.imageObj = imageObj
 	
+	// default values - can be changed by powerups
 	this.bombCount = 1;
-	this.bombSize = bombSize;
-	this.canRemoteDetonate = new Boolean(canRemoteDetonate);
+	this.bombSize = 2;
+	this.bombTime = 3;
+	this.canRemoteDetonate = false;
 	this.canKick = false;
 	
 	this.drawable = false;

@@ -1,12 +1,5 @@
 Tile = function(ctx, type, imageObj, imgoffsetx, imgoffsety, imgwx, imgwy, x, y, newWx, newWy, powClockIndex)
 {
-	// _getTileSrc = function(imageSrc, scope) {
-	// 	index = scope.Context.canvas.baseURI.indexOf('index.html');
-	// 	fileName = scope.Context.canvas.baseURI.slice(0 , index); // includes final '/' but excludes 'index.html'
-	// 	fileName += 'images/' + imageSrc;
-	// 	return fileName;
-	// };
-
 	if (type === 'wall' || type === 'destroyableWall') {
 		this.isSolid = true;
 	} else {
@@ -15,7 +8,6 @@ Tile = function(ctx, type, imageObj, imgoffsetx, imgoffsety, imgwx, imgwy, x, y,
 
 	this.powerupClockIndex = powClockIndex;
 	this.imageObj = imageObj
-	// var X = x, Y = y, Wx = wx, Wy = wy, offsetX = offx, offsetY = offy, newWidthX = newwx, newWidthY = newwy;
 	this.X = x;         this.imgOffsetX = imgoffsetx;
 	this.Y = y;         this.imgOffsetY = imgoffsety;
 	this.imgWx = imgwx; this.WidthX = newWx;

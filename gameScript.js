@@ -150,13 +150,7 @@ function createPowerup(x, y) {
 	var tileType = types[index]; // from stack overflow
 
 	offsetX = 3 + (index * 17);
-	// if (tileType === 'extra-bomb') {
-	// 	var offsetX = 3;
-	// } else if (tileType === 'skate') {
-	// 	var offsetX = 3+17;
-	// } else if (tileType === 'kick') {
-	// 	var offsetX = 3+(2*17);
-	// }
+	
 	tiles[x][y] = new Tile(context, tileType, powerupImg, offsetX, 3, 16, 16, x*16, y*16, 16, 16, powclock.Index);
 	tiles[x][y].Draw();
 
