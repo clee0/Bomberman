@@ -1,4 +1,4 @@
-Tile = function(ctx, imageObj, x, y, wx, wy, offx, offy, newwx, newwy)
+Tile = function(ctx, imageObj, imgoffsetx, imgoffsety, imgwx, imgwy, x, y, newWx, newWy)
 {
 	// _getTileSrc = function(imageSrc, scope) {
 	// 	index = scope.Context.canvas.baseURI.indexOf('index.html');
@@ -9,17 +9,17 @@ Tile = function(ctx, imageObj, x, y, wx, wy, offx, offy, newwx, newwy)
 
 	this.imageObj = imageObj
 	// var X = x, Y = y, Wx = wx, Wy = wy, offsetX = offx, offsetY = offy, newWidthX = newwx, newWidthY = newwy;
-	this.X = x;   this.offsetX = offx;
-	this.Y = y;   this.offsetY = offy;
-	this.Wx = wx; this.newWidthX = newwx;
-	this.Wy = wy; this.newWidthY = newwy;
+	this.X = x;   this.imgOffsetX = imgoffsetx;
+	this.Y = y;   this.imgOffsetY = imgoffsety;
+	this.imgWx = imgwx; this.WidthX = newWx;
+	this.imgWy = imgwy; this.WidthY = newWy;
 	this.Context = ctx;
 	
 	this.drawable = false;
 
 	this.Draw = function() {
 		// possibly this.X = imageIndex * 18 && this.Y = 1...?
-		this.Context.drawImage(this.imageObj, this.X, this.Y, this.Wx, this.Wy, 
-			this.offsetX, this.offsetY, this.newWidthX, this.newWidthY);
-	};
+		this.Context.drawImage(this.imageObj, this.imgOffsetX, this.imgOffsetY, this.imgWx, this.imgWy, 
+			this.X, this.Y, this.WidthX, this.WidthY);
+	}
 };

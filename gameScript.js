@@ -72,7 +72,7 @@ function startup() {
 	    img.src = items[i];
 	}
 
-	var items = [player1Img.src = getTileSrc('Player assets/playersheet.jpg'),
+	var items = [player1Img.src = getTileSrc('Player assets/playersheet1.jpg'),
 				 wallImg.src = getTileSrc('maptiles/maptiles.jpg'),
 				 emptyImg.src = getTileSrc('empty.jpg')];
 
@@ -168,42 +168,25 @@ function player(locx, locy) {
 	this.locy = locy;
 }
 
-/*document.addEventListener('keydown', function(event) {
+document.addEventListener('keydown', function(event) {
     if(event.keyCode == 37) {
     	console.log('moving left');
     	players[0].Move('left');
-  		// var targetTile = getTile(players[0].locx-1, players[0].locy);
-		// if (targetTile.isSolid == 0) {
-		// 	drawEmpty(players[0].locx, players[0].locy);
-		// 	players[0].locx--;
-		// 	drawPlayer(players[0]);
-		// }	
+		drawPlayers();
     }
     else if(event.keyCode == 39) {
     	console.log('moving right');
     	players[0].Move('right');
-		// var targetTile = getTile(players[0].locx+1, players[0].locy);
-		// if (targetTile.isSolid == 0) {
-		// 	players[0].locx++;
-		// 	drawPlayer(players[0]);
-		// }
+    	drawPlayers();
     }
 	else if(event.keyCode == 38) {
 		console.log('moving up');
 		players[0].Move('up');
-		// var targetTile = getTile(players[0].locx, players[0].locy-1);
-		// if (targetTile.isSolid == 0) {
-		// 	players[0].locy--;
-		// 	drawPlayer(players[0]);
-		// }
+		drawPlayers();
 	}
 	else if(event.keyCode == 40) {
 		console.log('moving down');
-		player[0].Move('down');
-		// var targetTile = getTile(players[0].locx, players[0].locy+1);
-		// if (targetTile.isSolid == 0) {
-		// 	players[0].locy++;
-		// 	drawPlayer(players[0]);
-		// }
+		players[0].Move('down');
+		drawPlayers();
 	}
-});*/
+});
