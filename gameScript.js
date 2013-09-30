@@ -4,12 +4,6 @@ context = canvas.getContext('2d');
 hudCanvas = document.getElementById('hudCanvas');
 hudContext = hudCanvas.getContext('2d');
 
-var tiles = new Array(13); // all tiles in game
-
-for (var i = 0; i < 13; i++) {
-	tiles[i] = new Array(13);
-}
-
 var changedTiles = new Array(); // tiles that have been changed
 
 var clock;
@@ -18,14 +12,22 @@ var wallImg = new Image();
 var player1Img = new Image();
 var emptyImg = new Image();
 var bombImg = new Image();
-var twoHud = new Image();
+var twoHudImg = new Image();
+var powerupImg = new Image();
 
 canvas.style.border = "black 1px solid";
 hudCanvas.style.border = "black 1px solid";
-startup();
 
+var tiles = new Array(13); // all tiles in game
+
+for (var i = 0; i < 13; i++) {
+	tiles[i] = new Array(13);
+}
 var players = new Array();
 var bombs = new Array();
+var powerups = new Array();
+
+startup();
 
 function stopClock() {
 	clock = clearInterval(clock);
@@ -101,17 +103,29 @@ function startup() {
 		wallImg.src = getTileSrc('maptiles/maptiles.jpg', context),
 		emptyImg.src = getTileSrc('maptiles/maptiles.jpg', context),
 		bombImg.src = getTileSrc('bombs/bombs.jpg', context),
-		twoHud.src = getTileSrc('Hud/twoplayerhud.png', hudContext)
+		twoHudImg.src = getTileSrc('Hud/twoplayerhud.png', hudContext),
+		powerupImg.src = getTileSrc('powerups/powerups.jpg', context)
 	];
 
 	loader(items, loadImage, function() {
+		
 		loadHud();
 		loadMap1();
+		makeFakePowerup();
 	});
 }
 
+function makeFakePowerup() {
+	powerups.push(new Powerup(context, 'extra-bomb', powerupImg, 3, 3, 16, 16, 1*16, 2*16, 16, 16, tiles[1][2]));
+	powerups[0].Draw();
+
+	var powclock = setInterval(function() {
+		powerups[0].shiftImg();
+	}, 310);
+}
+
 function loadHud() {
-	hudContext.drawImage(twoHud, 0, 0, 256, 32, 0, 0, 256,32);
+	hudContext.drawImage(twoHudImg, 0, 0, 256, 32, 0, 0, 256,32);
 }
 
 function addPlayers() {
