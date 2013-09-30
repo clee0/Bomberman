@@ -1,8 +1,12 @@
 canvas = document.getElementById('gameCanvas');
 context = canvas.getContext('2d');
 
-var tiles = new Array(); // all tiles in game
-var players = new Array();
+var tiles = new Array(13); // all tiles in game
+
+for (var i = 0; i < 13; i++) {
+	tiles[i] = new Array(13);
+}
+
 var changedTiles = new Array(); // tiles that have been changed
 
 var clock;
@@ -14,7 +18,6 @@ var emptyImg = new Image();
 canvas.style.border = "black 1px solid";
 startup();
 
-var tiles = new Array();
 var players = new Array();
 
 function stopClock() {
@@ -24,8 +27,8 @@ function stopClock() {
 function startup() {  
     if (context) {
     	// 13 x 13 tiles at 16 px each.. We could make this larger if we want
-        canvas.width = "208";
-        canvas.height = "208";
+        canvas.width = (tiles.length*16).toString();
+        canvas.height = (tiles[0].length*16).toString();
     }
 
     // load images before anything else.
@@ -108,7 +111,9 @@ function drawPlayers() {
 
 function drawTiles() {
 	for (var i = 0; i < tiles.length; i++) {
-		tiles[i].Draw();
+		for (var j = 0; j < tiles[0].length; j++) {
+			tiles[i][j].Draw();
+		}
 	}
 	addPlayers();
 }
@@ -125,22 +130,22 @@ function loadMap1() {
 		for (var y = 0; y < canvas.height/16; y++) {
 			// top or bottom wall:
 			if (y === 0 || y === (canvas.width/16)-1) {
-				tiles.push(new Tile(context, wallImg, 1, 1, 16, 16, x*16, y*16, 16, 16));
+				tiles[x][y] = new Tile(context, wallImg, 1, 1, 16, 16, x*16, y*16, 16, 16);
 			}
 			// for rows with dispersed walls:
 			else if ((y%2) === 0) {
 				if ((x%2) === 0) {
-					tiles.push(new Tile(context, wallImg, 1, 1, 16, 16, x*16, y*16, 16, 16));
+					tiles[x][y] = new Tile(context, wallImg, 1, 1, 16, 16, x*16, y*16, 16, 16);
 				} else {
-					tiles.push(new Tile(context, emptyImg, 1, 1, 16, 16, x*16, y*16, 16, 16));
+					tiles[x][y] = new Tile(context, emptyImg, 1, 1, 16, 16, x*16, y*16, 16, 16);
 				}
 			}
 			// for rows with only side walls:
 			else if ((y%2) != 0) {
 				if (x === 0 || x === (canvas.height/16)-1) {
-					tiles.push(new Tile(context, wallImg, 1, 1, 16, 16, x*16, y*16, 16, 16));
+					tiles[x][y] = new Tile(context, wallImg, 1, 1, 16, 16, x*16, y*16, 16, 16);
 				} else {
-					tiles.push(new Tile(context, emptyImg, 1, 1, 16, 16, x*16, y*16, 16, 16));
+					tiles[x][y] = new Tile(context, emptyImg, 1, 1, 16, 16, x*16, y*16, 16, 16);
 				}
 			}
 		}
@@ -171,6 +176,7 @@ function player(locx, locy) {
 document.addEventListener('keydown', function(event) {
     if(event.keyCode == 37) {
     	console.log('moving left');
+    	if (checkWall(players[0].X - 16, players[0].Y))
     	players[0].Move('left');
 		drawPlayers();
     }
@@ -190,3 +196,8 @@ document.addEventListener('keydown', function(event) {
 		drawPlayers();
 	}
 });
+
+function checkWall(x, y) {
+	debugger;
+	return 1;
+}
