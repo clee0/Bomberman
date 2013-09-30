@@ -29,7 +29,7 @@ function stopClock() {
 	
  }, 1000);
 
-function startup() {  
+function startup() {
     if (context) {
     	// 13 x 13 tiles at 16 px each.. We could make this larger if we want
         canvas.width = (tiles.length*16).toString();
@@ -68,10 +68,6 @@ function startup() {
 	    var onLoad = function (e) {
 	        e.target.removeEventListener("load", onLoad);
 
-	        // this next line can be removed.
-	        // only here to prove the image was loaded.
-	        document.body.appendChild(e.target);
-
 	        // notify that we're done.
 	        onComplete(items, i);
 	    }
@@ -81,11 +77,11 @@ function startup() {
 	}
 
 	var items = [
-			player1Img.src = getTileSrc('Player assets/playersheet1.jpg'),
-			wallImg.src = getTileSrc('maptiles/maptiles.jpg'),
-			// emptyImg.src = getTileSrc('empty.jpg')
-			emptyImg.src = getTileSrc('maptiles/maptiles.jpg')
-		];
+		player1Img.src = getTileSrc('Player assets/playersheet1.jpg'),
+		wallImg.src = getTileSrc('maptiles/maptiles.jpg'),
+		// emptyImg.src = getTileSrc('empty.jpg')
+		emptyImg.src = getTileSrc('maptiles/maptiles.jpg')
+	];
 
 	loader(items, loadImage, function() {
 		loadMap1();
