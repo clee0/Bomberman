@@ -26,8 +26,10 @@ var bombImg = new Image();
 var twoHudImg = new Image();
 var powerupImg = new Image();
 explImg[0] = new Image();
-explImg[1] = new Image();
-explImg[2] = new Image();
+explImg[1] = new Array(); explImg[1][0] = new Image(); explImg[1][1] = new Image();
+explImg[2] = new Array(); explImg[2][0] = new Image(); explImg[2][1] = new Image();
+explImg[3] = new Array(); explImg[3][0] = new Image(); explImg[3][1] = new Image();
+explImg[4] = new Array(); explImg[4][0] = new Image(); explImg[4][1] = new Image();
 
 // object for making clocks so powerups can have different clocks at different references
 var powclock = {
@@ -117,9 +119,15 @@ function startup() {
 		twoHudImg.src = getTileSrc('Hud/twoplayerhud.png', hudContext),
 		powerupImg.src = getTileSrc('powerups/powerups.jpg', context),
 		twoHudImg.src = getTileSrc('Hud/twoplayerhud.png', hudContext),
-		explImg[0].src = getTileSrc('bombs/bombcenter.png', context),
-		explImg[1].src = getTileSrc('bombs/bombmid.png', context),
-		explImg[2].src = getTileSrc('bombs/bombend.png', context),
+		explImg[0].src = getTileSrc('explosion/bombcenter.png', context),
+		explImg[1][0].src = getTileSrc('explosion/up/bombmid.png', context),
+		explImg[1][1].src = getTileSrc('explosion/up/bombend.png', context),
+		explImg[2][0].src = getTileSrc('explosion/right/bombmid.png', context),
+		explImg[2][1].src = getTileSrc('explosion/right/bombend.png', context),
+		explImg[3][0].src = getTileSrc('explosion/down/bombmid.png', context),
+		explImg[3][1].src = getTileSrc('explosion/down/bombend.png', context),
+		explImg[4][0].src = getTileSrc('explosion/left/bombmid.png', context),
+		explImg[4][1].src = getTileSrc('explosion/left/bombend.png', context)
 	];
 
 	loader(items, loadImage, function() {
@@ -211,7 +219,10 @@ function explodeBomb(bomb) {
 	for(var i = 1; i <= bomb.player.bombSize - 1; i++) {
 		if(!hitRight) {
 			if(!tiles[locx+i][locy].isSolid) {
-				tiles[locx+i][locy] = new Tile(context, 'explosion', explImg[1], 0, 2, 12, 12, bomb.x+(16*i), bomb.y, 16, 16);
+				if(i = bomb.player.bombSize - 1)
+					tiles[locx+i][locy] = new Tile(context, 'explosion', explImg[2][1], 84, 0, 16, 16, bomb.x+(16*i), bomb.y, 16, 16);
+				else
+					tiles[locx+i][locy] = new Tile(context, 'explosion', explImg[2][0], 84, 0, 16, 16, bomb.x+(16*i), bomb.y, 16, 16);
 				tiles[locx+i][locy].Draw();
 				explosionTiles.push(tiles[locx+i][locy]);
 			}
@@ -224,7 +235,10 @@ function explodeBomb(bomb) {
 		}
 		if(!hitLeft) {
 			if(!tiles[locx-i][locy].isSolid) {
-				tiles[locx-i][locy] = new Tile(context, 'explosion', explImg[1], 0, 2, 12, 12, bomb.x-(16*i), bomb.y, 16, 16);
+				if(i = bomb.player.bombSize - 1)
+					tiles[locx-i][locy] = new Tile(context, 'explosion', explImg[4][1], 0, 0, 16, 16, bomb.x-(16*i), bomb.y, 16, 16);
+				else
+					tiles[locx-i][locy] = new Tile(context, 'explosion', explImg[4][0], 0, 0, 16, 16, bomb.x-(16*i), bomb.y, 16, 16);
 				tiles[locx-i][locy].Draw();
 				explosionTiles.push(tiles[locx-i][locy]);
 			}
@@ -237,7 +251,10 @@ function explodeBomb(bomb) {
 		}
 		if(!hitUp) {
 			if(!tiles[locx][locy-i].isSolid) {
-				tiles[locx][locy-i] = new Tile(context, 'explosion', explImg[1], 0, 2, 12, 12, bomb.x, bomb.y-(16*i), 16, 16);
+				if(i = bomb.player.bombSize - 1)
+					tiles[locx][locy-i] = new Tile(context, 'explosion', explImg[1][1], 0, 0, 16, 16, bomb.x, bomb.y-(16*i), 16, 16);
+				else
+					tiles[locx][locy-i] = new Tile(context, 'explosion', explImg[1][0], 0, 0, 16, 16, bomb.x, bomb.y-(16*i), 16, 16);
 				tiles[locx][locy-i].Draw();
 				explosionTiles.push(tiles[locx][locy-i]);
 			}
@@ -250,7 +267,10 @@ function explodeBomb(bomb) {
 		}
 		if(!hitDown) {
 			if(!tiles[locx][locy+i].isSolid) {
-				tiles[locx][locy+i] = new Tile(context, 'explosion', explImg[1], 0, 2, 12, 12, bomb.x, bomb.y+(16*i), 16, 16);
+				if(i = bomb.player.bombSize - 1)
+					tiles[locx][locy+i] = new Tile(context, 'explosion', explImg[3][1], 0, 84, 16, 16, bomb.x, bomb.y+(16*i), 16, 16);
+				else
+					tiles[locx][locy+i] = new Tile(context, 'explosion', explImg[3][0], 0, 84, 16, 16, bomb.x, bomb.y+(16*i), 16, 16);
 				tiles[locx][locy+i].Draw();
 				explosionTiles.push(tiles[locx][locy+i]);
 			}
