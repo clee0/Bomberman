@@ -4,7 +4,18 @@ context = canvas.getContext('2d');
 hudCanvas = document.getElementById('hudCanvas');
 hudContext = hudCanvas.getContext('2d');
 
+canvas.style.border = "black 1px solid";
+hudCanvas.style.border = "black 1px solid";
+
 var changedTiles = new Array(); // tiles that have been changed
+var explImg = new Array();
+var tiles = new Array(13); // all tiles in game
+for (var i = 0; i < 13; i++) {
+	tiles[i] = new Array(13);
+}
+var players = new Array();
+var bombs = new Array();
+var types = new Array('extra-bomb');
 
 var clock;
 
@@ -14,22 +25,9 @@ var emptyImg = new Image();
 var bombImg = new Image();
 var twoHudImg = new Image();
 var powerupImg = new Image();
-
-var explImg = new Array();
 explImg[0] = new Image();
 explImg[1] = new Image();
 explImg[2] = new Image();
-
-canvas.style.border = "black 1px solid";
-hudCanvas.style.border = "black 1px solid";
-
-var tiles = new Array(13); // all tiles in game
-
-for (var i = 0; i < 13; i++) {
-	tiles[i] = new Array(13);
-}
-var players = new Array();
-var bombs = new Array();
 
 // object for making clocks so powerups can have different clocks at different references
 var powclock = {
@@ -127,28 +125,33 @@ function startup() {
 	loader(items, loadImage, function() {
 		loadHud();
 		loadMap1();
-		makeFakePowerup();
+		startFakePowerups();
 	});
 }
 
-function makeFakePowerup() {
-	tiles[1][2] = new Tile(context, 'extra-bomb', powerupImg, 3, 3, 16, 16, 1*16, 2*16, 16, 16, powclock.Index);
-	tiles[1][2].Draw();
+function startFakePowerups() {
+	// create powerup at x=1, y=2 on tile grid
+	createPowerup(1,2);
+	// create powerup at x=2, y=1 on tile grid
+	createPowerup(2, 1);
+	createPowerup(3,1);
+	createPowerup(3,2);
+}
+
+function createPowerup(x, y) {
+	var tileType = types[Math.floor(Math.random() * types.length)]; // from stack overflow
+	if (tileType === 'extra-bomb') {
+		var offsetX = 3;
+		var offsetY = 3;
+	}
+	tiles[x][y] = new Tile(context, tileType, powerupImg, offsetX, offsetY, 16, 16, x*16, y*16, 16, 16, powclock.Index);
+	tiles[x][y].Draw();
 
 	var Name = 'powClock' + powclock.Index;
 	++powclock.Index;
 	powclock[Name] = setInterval(function() {
-		tiles[1][2].shiftImg();
+		tiles[x][y].shiftImg();
 	}, 400);
-
-	tiles[2][1] = new Tile(context, 'extra-bomb', powerupImg, 3, 3, 16, 16, 2*16, 1*16, 16, 16, powclock.Index);
-	tiles[2][1].Draw();
-
-	var Name = 'powClock' + powclock.Index;
-	++powclock.Index;
-	powclock[Name] = setInterval(function() {
-		tiles[2][1].shiftImg();
-	}, 400);	
 }
 
 function loadHud() {
