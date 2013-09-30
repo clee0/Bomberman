@@ -1,6 +1,11 @@
 Updates from each day / commit:
 
 9-29-13:
+(alex)
+-changed 'empty.jpg' to new color so it can be seen.
+-put Tile info in new file
+
+9-29-13:
 (chris)
 -added 'empty.jpg' (18x18 white squre)
 -Added tile and player classes
