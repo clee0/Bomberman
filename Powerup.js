@@ -1,12 +1,12 @@
 Powerup = function(ctx, type, imageObj, imgoffsetx, imgoffsety, imgwx, imgwy, x, y, newWx, newWy, Tile)
 {
 	this.imageObj = imageObj;
-	this.X = x;         this.imgOffsetX = imgoffsetx;
-	this.Y = y;         this.imgOffsetY = imgoffsety;
-	this.imgWx = imgwx; this.WidthX = newWx;
-	this.imgWy = imgwy; this.WidthY = newWy;
-	this.Context = ctx; this.Type = type;
-	this.imgSlot = 'top';
+	this.X = x;           this.imgOffsetX = imgoffsetx;
+	this.Y = y;           this.imgOffsetY = imgoffsety;
+	this.imgWx = imgwx;   this.WidthX = newWx;
+	this.imgWy = imgwy;   this.WidthY = newWy;
+	this.Context = ctx;   this.Type = type;
+	this.imgSlot = 'top'; this.bombCount = 3;
 
 	this.Draw = function() {
 		this.Context.drawImage(this.imageObj, this.imgOffsetX, this.imgOffsetY, this.imgWx, this.imgWy, 

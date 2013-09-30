@@ -235,32 +235,34 @@ function player(locx, locy) {
 }
 
 document.addEventListener('keydown', function(event) {
-	var x1 = players[0].X/16; var y1 = players[0].Y/16;
+	var p1 = players[0];
+	var x1 = p1.X/16; var y1 = p1.Y/16;
     if(event.keyCode == 37) {
     	if (!checkWall(x1 - 1, y1)) {
     		tiles[x1][y1].Draw();
-    		players[0].Move('left');
+    		p1.Move('left');
     		drawPlayers();
     	}
     }
     else if(event.keyCode == 39) {
     	if (!checkWall(x1 + 1, y1)) {
     		tiles[x1][y1].Draw();
-	    	players[0].Move('right');
+	    	p1.Move('right');
 	    	drawPlayers();
 	    }
     }
 	else if(event.keyCode == 38) {
 		if (!checkWall(x1, y1 - 1)) {
 			tiles[x1][y1].Draw();
-			players[0].Move('up');
+			p1.Move('up');
+			// checkPickup(players[0]);
 			drawPlayers();
 		}
 	}
 	else if(event.keyCode == 40) {
 		if (!checkWall(x1, y1 + 1)) {
 			tiles[x1][y1].Draw();
-			players[0].Move('down');
+			p1.Move('down');
 			drawPlayers();
 		}
 	}
