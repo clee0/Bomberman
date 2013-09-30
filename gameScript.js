@@ -15,7 +15,7 @@ for (var i = 0; i < 13; i++) {
 }
 var players = new Array();
 var bombs = new Array();
-var types = new Array('extra-bomb');
+var types = new Array('extra-bomb', 'skate', 'kick');
 
 var clock;
 
@@ -133,7 +133,7 @@ function startFakePowerups() {
 	// create powerup at x=1, y=2 on tile grid
 	createPowerup(1,2);
 	// create powerup at x=2, y=1 on tile grid
-	createPowerup(2, 1);
+	createPowerup(2,1);
 	createPowerup(3,1);
 	createPowerup(3,2);
 }
@@ -142,9 +142,12 @@ function createPowerup(x, y) {
 	var tileType = types[Math.floor(Math.random() * types.length)]; // from stack overflow
 	if (tileType === 'extra-bomb') {
 		var offsetX = 3;
-		var offsetY = 3;
+	} else if (tileType === 'skate') {
+		var offsetX = 3+17;
+	} else if (tileType === 'kick') {
+		var offsetX = 3+(2*17);
 	}
-	tiles[x][y] = new Tile(context, tileType, powerupImg, offsetX, offsetY, 16, 16, x*16, y*16, 16, 16, powclock.Index);
+	tiles[x][y] = new Tile(context, tileType, powerupImg, offsetX, 3, 16, 16, x*16, y*16, 16, 16, powclock.Index);
 	tiles[x][y].Draw();
 
 	var Name = 'powClock' + powclock.Index;
@@ -365,14 +368,26 @@ document.addEventListener('keydown', function(event) {
 function checkPickup(player) {
 	var x = player.X/16, y = player.Y/16;
 	if (tiles[x][y].Type === 'extra-bomb') {
-		console.log(player.bombCount);
+		// console.log('prev. bomb count:', player.bombCount);
 		++player.bombCount;
-		clearInterval(powclock['powClock' + tiles[x][y].powerupClockIndex]);
-		tiles[x][y] = new Tile(context, 'empty', emptyImg, 52, 1, 16, 16, player.X, player.Y, 16, 16);
-		tiles[x][y].Draw();
-		player.Draw();
-		console.log(player.bombCount);
+		clearPowerup(x, y, player);
+		// console.log('new bomb count:', player.bombCount);
+	} else if (tiles[x][y].Type === 'skate') {
+		// speed increase?
+		clearPowerup(x, y, player);
+	} else if (tiles[x][y].Type === 'kick') {
+		// console.log('prev. canKick:', player.canKick);
+		player.canKick = true;
+		clearPowerup(x, y, player);
+		// console.log('now canKick:', player.canKick);
 	}
+}
+
+function clearPowerup(x, y, player) {
+	clearInterval(powclock['powClock' + tiles[x][y].powerupClockIndex]);
+	tiles[x][y] = new Tile(context, 'empty', emptyImg, 52, 1, 16, 16, player.X, player.Y, 16, 16);
+	tiles[x][y].Draw();
+	player.Draw();
 }
 
 function checkWall(x, y) {
