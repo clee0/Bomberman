@@ -1,6 +1,9 @@
 canvas = document.getElementById('gameCanvas');
 context = canvas.getContext('2d');
 
+hudCanvas = document.getElementById('hudCanvas');
+hudContext = hudCanvas.getContext('2d');
+
 var tiles = new Array(13); // all tiles in game
 
 for (var i = 0; i < 13; i++) {
@@ -15,8 +18,10 @@ var wallImg = new Image();
 var player1Img = new Image();
 var emptyImg = new Image();
 var bombImg = new Image();
+var twoHud = new Image();
 
 canvas.style.border = "black 1px solid";
+hudCanvas.style.border = "black 1px solid";
 startup();
 
 var players = new Array();
@@ -44,6 +49,11 @@ function startup() {
     	// 13 x 13 tiles at 16 px each.. We could make this larger if we want
         canvas.width = (tiles.length*16).toString();
         canvas.height = (tiles[0].length*16).toString();
+    }
+
+    if (hudContext) {
+    	hudCanvas.width = 256;
+    	hudCanvas.height = 32;
     }
 
     // load images before anything else.
@@ -86,14 +96,22 @@ function startup() {
 	    img.src = items[i];
 	}
 
-	var items = [player1Img.src = getTileSrc('Player assets/playersheet1.jpg'),
-				 wallImg.src = getTileSrc('maptiles/maptiles.jpg'),
-				 emptyImg.src = getTileSrc('maptiles/maptiles.jpg'),
-				 bombImg.src = getTileSrc('bombs/bombs.jpg')];
+	var items = [
+		player1Img.src = getTileSrc('Player assets/playersheet1.jpg', context),
+		wallImg.src = getTileSrc('maptiles/maptiles.jpg', context),
+		emptyImg.src = getTileSrc('maptiles/maptiles.jpg', context),
+		bombImg.src = getTileSrc('bombs/bombs.jpg', context),
+		twoHud.src = getTileSrc('Hud/twoplayerhud.png', hudContext)
+	];
 
 	loader(items, loadImage, function() {
+		loadHud();
 		loadMap1();
 	});
+}
+
+function loadHud() {
+	hudContext.drawImage(twoHud, 0, 0, 256, 32, 0, 0, 256,32);
 }
 
 function addPlayers() {
@@ -134,9 +152,9 @@ function explodeBomb(bomb) {
 	
 }
 
-function getTileSrc(imageSrc) {
-	var index = context.canvas.baseURI.indexOf('index.html');
-	fileName = context.canvas.baseURI.slice(0 , index); // includes final '/' but excludes 'index.html'
+function getTileSrc(imageSrc, ctx) {
+	var index = ctx.canvas.baseURI.indexOf('index.html');
+	fileName = ctx.canvas.baseURI.slice(0 , index); // includes final '/' but excludes 'index.html'
 	fileName += 'images/' + imageSrc;
 	return fileName;
 };

@@ -1,8 +1,9 @@
-div#canvas-container {
+div#game-canvas-container, div#hud-canvas-container {
 	width: 100%;
 	text-align: center;
 }
 
-canvas#gameCanvas {
+canvas {
+	margin-top: -5px;
 	display: inline;
 }
