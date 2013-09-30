@@ -18,7 +18,11 @@ var bombs = new Array();
 var types = new Array('extra-bomb', 'skate', 'kick', 'glove', 'fire', 'disease', 'crane');
 
 var clock;
+var TO_RADIANS = Math.PI/180;
 
+var clockone = new Image();
+var clocktwo = new Image();
+var clockmid = new Image();
 var wallImg = new Image();
 var player1Img = new Image();
 var emptyImg = new Image();
@@ -38,12 +42,54 @@ startup();
 
 // TODO: give names to players so we know who wins at the end?
 
-function stopClock() {
-	clock = clearInterval(clock);
+function smallClockUpdate(){
+	var currentTime = new Date();
+	var currentSeconds = currentTime.getSeconds();
+	modTime = (currentSeconds%8)
+	//console.log(modTime);
+	updateSmallClock(modTime);
+}
+	
+function drawRotatedImage(ctx,image, x, y, angle,offsetx,offsety) { 
+	// save the current co-ordinate system 
+	// before we screw with it
+	ctx.save(); 
+	// move to the middle of where we want to draw our image
+	ctx.translate(x, y);
+	// rotate around that point, converting our 
+	// angle from degrees to radians 
+	ctx.rotate(angle * TO_RADIANS);
+	// draw it up and to the left by half the width
+	// and height of the image 
+	ctx.drawImage(image, -(image.width/3) + offsetx, -(image.height/3) - offsety);
+	// and restore the co-ords to how they were when we began
+	ctx.restore(); 
+}
+
+function updateSmallClock(imageNumber){	
+	hudContext.drawImage(clockmid,0,0,7,7,125,15,7,7); //reset 
+	if(imageNumber == 0){
+		hudContext.drawImage(clockone,0,0,3,3,127,15,3,3); //top
+	}else if (imageNumber == 1){
+		drawRotatedImage(hudContext,clocktwo,126,15,90,2,5); //NE	
+	}else if (imageNumber == 2){
+		drawRotatedImage(hudContext,clockone,127,15,90,3,3); //right	
+	}else if (imageNumber == 3){
+		drawRotatedImage(hudContext,clocktwo,127,15,180,-3,6); //SE
+	}else if (imageNumber == 4){
+		drawRotatedImage(hudContext,clockone,127,15,180,-2,6); //bottom	
+	}else if (imageNumber == 5){
+		drawRotatedImage(hudContext,clocktwo,127,15,270,-5,1); //SW
+	}else if (imageNumber == 6){
+		drawRotatedImage(hudContext,clockone,127,15,270,-4,1); //right
+	}else{
+		hudContext.drawImage(clocktwo,0,0,3,3,126,15,3,3); //NW
+	}
 }
 
 //use setInteval for game loop?
- clock = self.setInterval(function() {
+clock = self.setInterval(function() {
+	smallClockUpdate();
 	for(var i = 0; i < bombs.length; i++) {
 		if(bombs[i].hasExploded) {
 			// TODO: Call function to explode bomb
@@ -117,6 +163,9 @@ function startup() {
 		twoHudImg.src = getTileSrc('Hud/twoplayerhud.png', hudContext),
 		powerupImg.src = getTileSrc('powerups/powerups.jpg', context),
 		twoHudImg.src = getTileSrc('Hud/twoplayerhud.png', hudContext),
+		clockone.src = getTileSrc('Hud/clockone.png',hudContext),
+		clocktwo.src = getTileSrc('Hud/clocktwo.png',hudContext),
+		clockmid.src = getTileSrc('Hud/clockmid.png',hudContext),
 		explImg[0].src = getTileSrc('bombs/bombcenter.png', context),
 		explImg[1].src = getTileSrc('bombs/bombmid.png', context),
 		explImg[2].src = getTileSrc('bombs/bombend.png', context),
@@ -124,6 +173,7 @@ function startup() {
 
 	loader(items, loadImage, function() {
 		loadHud();
+		loadSmallClock();
 		loadMap1();
 		startFakePowerups();
 	});
@@ -150,7 +200,7 @@ function createPowerup(x, y) {
 	var tileType = types[index]; // from stack overflow
 
 	offsetX = 3 + (index * 17);
-	
+
 	tiles[x][y] = new Tile(context, tileType, powerupImg, offsetX, 3, 16, 16, x*16, y*16, 16, 16, powclock.Index);
 	tiles[x][y].Draw();
 
@@ -163,6 +213,10 @@ function createPowerup(x, y) {
 
 function loadHud() {
 	hudContext.drawImage(twoHudImg, 0, 0, 256, 32, 0, 0, 256,32);
+}
+
+function loadSmallClock() {	
+	hudContext.drawImage(clockone,0,0,3,3,127,15,3,3); //top
 }
 
 function addPlayers() {
