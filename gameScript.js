@@ -15,6 +15,11 @@ var bombImg = new Image();
 var twoHudImg = new Image();
 var powerupImg = new Image();
 
+var explImg = new Array();
+explImg[0] = new Image();
+explImg[1] = new Image();
+explImg[2] = new Image();
+
 canvas.style.border = "black 1px solid";
 hudCanvas.style.border = "black 1px solid";
 
@@ -38,6 +43,8 @@ function stopClock() {
 	for(var i = 0; i < bombs.length; i++) {
 		if(bombs[i].hasExploded) {
 			// TODO: Call function to explode bomb
+			explodeBomb(bombs[i]);
+			
 		}
 		else {
 			bombs[i].countdown();
@@ -105,6 +112,10 @@ function startup() {
 		bombImg.src = getTileSrc('bombs/bombs.jpg', context),
 		twoHudImg.src = getTileSrc('Hud/twoplayerhud.png', hudContext),
 		powerupImg.src = getTileSrc('powerups/powerups.jpg', context)
+		twoHud.src = getTileSrc('Hud/twoplayerhud.png', hudContext),
+		explImg[0].src = getTileSrc('bombs/bombcenter.png', context),
+		explImg[1].src = getTileSrc('bombs/bombend.png', context),
+		explImg[2].src = getTileSrc('bombs/bombmid.png', context),
 	];
 
 	loader(items, loadImage, function() {
@@ -163,7 +174,8 @@ function dropBomb(player) {
 }
 
 function explodeBomb(bomb) {
-	
+	tiles[bomb.x/16][bomb.y/16] = new Tile(context, 'explosion', explImg[0], 0, 2, 12, 12, bomb.x, bomb.y, 16, 16);
+	tiles[bomb.x/16][bomb.y/16].Draw();
 }
 
 function getTileSrc(imageSrc, ctx) {
