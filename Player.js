@@ -1,4 +1,4 @@
-Player = function(ctx, imageObj, imgoffsetx, imgoffsety, imgwx, imgwy, x, y, newWx, newWy)
+Player = function(ctx, imageObj, imgoffsetx, imgoffsety, imgwx, imgwy, x, y, newWx, newWy, bombSize, bombTime, canRemoteDetonate)
 {
 	// _getTileSrc = function(imageSrc, scope) {
 	// 	index = scope.Context.canvas.baseURI.indexOf('index.html');
@@ -14,6 +14,9 @@ Player = function(ctx, imageObj, imgoffsetx, imgoffsety, imgwx, imgwy, x, y, new
 	this.imgWx = imgwx; this.WidthX = newWx;
 	this.imgWy = imgwy; this.WidthY = newWy;
 	this.Context = ctx;
+	
+	this.bombSize = bombSize;
+	this.canRemoteDetonate = new Boolean(canRemoteDetonate);
 	
 	this.drawable = false;
 

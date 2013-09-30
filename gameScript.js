@@ -21,6 +21,11 @@ function stopClock() {
 	clock = clearInterval(clock);
 }
 
+//use setInteval for game loop?
+ clock = self.setInterval(function() {
+	
+ }, 1000);
+
 function startup() {  
     if (context) {
     	// 13 x 13 tiles at 16 px each.. We could make this larger if we want
@@ -86,11 +91,6 @@ function addPlayers() {
 	players[0] = new Player(context, player1Img, 18, 1, 16, 25, 1*16, 1*16, 16, 16);
 	// players.push(new Player(context, player1Img, 18, 1, 16, 25, 1*16, 1*16, 16, 16));
 	drawPlayers();
-
-    //use setInteval for game loop?
-    // clock = self.setInterval(function() {
-    // 	console.log('looping');
-    // }, 250);
 }
 
 function next() {
