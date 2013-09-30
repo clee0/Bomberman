@@ -15,7 +15,7 @@ for (var i = 0; i < 13; i++) {
 }
 var players = new Array();
 var bombs = new Array();
-var types = new Array('extra-bomb', 'skate', 'kick');
+var types = new Array('extra-bomb', 'skate', 'kick', 'glove', 'fire', 'disease', 'crane');
 
 var clock;
 
@@ -136,17 +136,27 @@ function startFakePowerups() {
 	createPowerup(2,1);
 	createPowerup(3,1);
 	createPowerup(3,2);
+	createPowerup(3,3);
+	createPowerup(3,4);
+	createPowerup(3,5);
+	createPowerup(3,6);
+	createPowerup(3,7);
+	createPowerup(3,8);
+	createPowerup(3,9);
 }
 
 function createPowerup(x, y) {
-	var tileType = types[Math.floor(Math.random() * types.length)]; // from stack overflow
-	if (tileType === 'extra-bomb') {
-		var offsetX = 3;
-	} else if (tileType === 'skate') {
-		var offsetX = 3+17;
-	} else if (tileType === 'kick') {
-		var offsetX = 3+(2*17);
-	}
+	var index = Math.floor(Math.random() * types.length);
+	var tileType = types[index]; // from stack overflow
+
+	offsetX = 3 + (index * 17);
+	// if (tileType === 'extra-bomb') {
+	// 	var offsetX = 3;
+	// } else if (tileType === 'skate') {
+	// 	var offsetX = 3+17;
+	// } else if (tileType === 'kick') {
+	// 	var offsetX = 3+(2*17);
+	// }
 	tiles[x][y] = new Tile(context, tileType, powerupImg, offsetX, 3, 16, 16, x*16, y*16, 16, 16, powclock.Index);
 	tiles[x][y].Draw();
 
@@ -380,6 +390,18 @@ function checkPickup(player) {
 		player.canKick = true;
 		clearPowerup(x, y, player);
 		// console.log('now canKick:', player.canKick);
+	} else if (tiles[x][y].Type === 'glove') {
+		// not sure what this does
+		clearPowerup(x, y, player);
+	} else if (tiles[x][y].Type === 'fire') {
+		// increase blast length?
+		clearPowerup(x, y, player);
+	} else if (tiles[x][y].Type === 'disease') {
+		// disease effect for player?
+		clearPowerup(x, y, player);
+	} else if (tiles[x][y].Type === 'crane') {
+		// allow player to pickup other bombs?
+		clearPowerup(x, y, player);
 	}
 }
 
