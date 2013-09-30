@@ -7,6 +7,12 @@ Tile = function(ctx, type, imageObj, imgoffsetx, imgoffsety, imgwx, imgwy, x, y,
 	// 	return fileName;
 	// };
 
+	if (type === 'wall') {
+		this.isSolid = true;
+	} else {
+		this.isSolid = false;
+	}
+
 	this.imageObj = imageObj
 	// var X = x, Y = y, Wx = wx, Wy = wy, offsetX = offx, offsetY = offy, newWidthX = newwx, newWidthY = newwy;
 	this.X = x;         this.imgOffsetX = imgoffsetx;

@@ -80,9 +80,12 @@ function startup() {
 	    img.src = items[i];
 	}
 
-	var items = [player1Img.src = getTileSrc('Player assets/playersheet1.jpg'),
-				 wallImg.src = getTileSrc('maptiles/maptiles.jpg'),
-				 emptyImg.src = getTileSrc('empty.jpg')];
+	var items = [
+			player1Img.src = getTileSrc('Player assets/playersheet1.jpg'),
+			wallImg.src = getTileSrc('maptiles/maptiles.jpg'),
+			// emptyImg.src = getTileSrc('empty.jpg')
+			emptyImg.src = getTileSrc('maptiles/maptiles.jpg')
+		];
 
 	loader(items, loadImage, function() {
 		loadMap1();
@@ -137,7 +140,7 @@ function loadMap1() {
 				if ((x%2) === 0) {
 					tiles[x][y] = new Tile(context, 'wall', wallImg, 1, 1, 16, 16, x*16, y*16, 16, 16);
 				} else {
-					tiles[x][y] = new Tile(context, 'empty', emptyImg, 1, 1, 16, 16, x*16, y*16, 16, 16);
+					tiles[x][y] = new Tile(context, 'empty', emptyImg, 52, 1, 16, 16, x*16, y*16, 16, 16);
 				}
 			}
 			// for rows with only side walls:
@@ -145,7 +148,7 @@ function loadMap1() {
 				if (x === 0 || x === (canvas.height/16)-1) {
 					tiles[x][y] = new Tile(context, 'wall', wallImg, 1, 1, 16, 16, x*16, y*16, 16, 16);
 				} else {
-					tiles[x][y] = new Tile(context, 'empty', emptyImg, 1, 1, 16, 16, x*16, y*16, 16, 16);
+					tiles[x][y] = new Tile(context, 'empty', emptyImg, 52, 1, 16, 16, x*16, y*16, 16, 16);
 				}
 			}
 		}
@@ -162,11 +165,6 @@ function loadMap1() {
 // 	this.isDestroyable=new Boolean(isDestroyable);
 // 	this.isDeadly=new Boolean(isDeadly);
 // }
-
-function getTile(x,y) {
-	var index = (13*y)+x;
-	return tiles[index];
-}
 
 function player(locx, locy) {
 	this.locx = locx;
@@ -206,7 +204,7 @@ document.addEventListener('keydown', function(event) {
 });
 
 function checkWall(x, y) {
-	if (tiles[x][y].Type === 'wall') {
+	if (tiles[x][y].isSolid) {
 		return true;
 	}
 	return false;
