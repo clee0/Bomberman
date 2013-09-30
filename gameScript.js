@@ -14,11 +14,13 @@ var clock;
 var wallImg = new Image();
 var player1Img = new Image();
 var emptyImg = new Image();
+var bombImg = new Image();
 
 canvas.style.border = "black 1px solid";
 startup();
 
 var players = new Array();
+var bombs = new Array();
 
 function stopClock() {
 	clock = clearInterval(clock);
@@ -26,7 +28,15 @@ function stopClock() {
 
 //use setInteval for game loop?
  clock = self.setInterval(function() {
-	
+	for(var i = 0; i < bombs.length; i++) {
+		if(bombs[i].hasExploded) {
+			// TODO: Call function to explode bomb
+		}
+		else {
+			bombs[i].countdown;
+			bombs[i].draw;
+		}
+	}
  }, 1000);
 
 function startup() {  
@@ -82,7 +92,8 @@ function startup() {
 
 	var items = [player1Img.src = getTileSrc('Player assets/playersheet1.jpg'),
 				 wallImg.src = getTileSrc('maptiles/maptiles.jpg'),
-				 emptyImg.src = getTileSrc('empty.jpg')];
+				 emptyImg.src = getTileSrc('empty.jpg'),
+				 bombImg.src = getTileSrc('bombs/bombs.jpg')];
 
 	loader(items, loadImage, function() {
 		loadMap1();
@@ -116,6 +127,12 @@ function drawTiles() {
 		}
 	}
 	addPlayers();
+}
+
+function dropBomb(player) {
+	var img = new image();
+	img.src = 
+	bombs[bombs.length] = new Bomb(bombImg, 1, 1, 16, 16, 16, 16, player);
 }
 
 function getTileSrc(imageSrc) {
@@ -194,6 +211,11 @@ document.addEventListener('keydown', function(event) {
 		console.log('moving down');
 		players[0].Move('down');
 		drawPlayers();
+	}
+	// Player 1 bomb key
+	else if(event.keyCode == 16) {
+		alert('asdf');
+		dropBomb(players[0]);
 	}
 });
 
