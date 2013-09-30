@@ -206,16 +206,24 @@ function dropBomb(player) {
 	bombs[bombs.length] = tempBomb;
 	tiles[tempBomb.x/16][tempBomb.y/16] = new Tile(context, 'bomb', bombImg, 0, 0, 14, 18, tempBomb.x, tempBomb.y, 16, 16);
 }
+
+// 30% to return true (checking if wall drops powerup)
+function rollPowerup() {
+	// Creates a random number between 0-100
+	var rand = Math.floor(Math.random()*101);
+	if(rand < 30) {return true;}
+	return false;
+}
 	
 function explodeBomb(bomb) {
 	var locx = bomb.x/16;
 	var locy = bomb.y/16;
 	var explosionTiles = new Array();
+	var powerupTiles = new Array();
 	tiles[locx][locy] = new Tile(context, 'explosion', explImg[0], 0, 2, 12, 12, bomb.x, bomb.y, 16, 16);
 	tiles[locx][locy].Draw();
 	explosionTiles.push(tiles[locx][locy]);
 	var hitLeft = false; var hitRight = false; var hitUp = false; var hitDown = false;
-	// TODO: Rotate explosion images
 	for(var i = 1; i <= bomb.player.bombSize - 1; i++) {
 		if(!hitRight) {
 			if(!tiles[locx+i][locy].isSolid) {
@@ -227,8 +235,11 @@ function explodeBomb(bomb) {
 				explosionTiles.push(tiles[locx+i][locy]);
 			}
 			else {
-				if(tiles[locx+i][locy].type == 'destroyableWall') {
-					// TODO: destroy the wall
+				if(tiles[locx+i][locy].Type == 'destroyableWall') {
+					tiles[locx+i][locy] = new Tile(context, 'explosion', explImg[2][1], 84, 0, 16, 16, bomb.x+(16*i), bomb.y, 16, 16);
+					tiles[locx+i][locy].Draw();
+					explosionTiles.push(tiles[locx+i][locy]);
+					powerupTiles.push(tiles[locx+i][locy]);
 				}
 				hitRight = true;
 			}
@@ -243,8 +254,11 @@ function explodeBomb(bomb) {
 				explosionTiles.push(tiles[locx-i][locy]);
 			}
 			else {
-				if(tiles[locx-i][locy].type == 'destroyableWall') {
-					// TODO: destroy the wall
+				if(tiles[locx-i][locy].Type == 'destroyableWall') {
+					tiles[locx-i][locy] = new Tile(context, 'explosion', explImg[4][1], 0, 0, 16, 16, bomb.x-(16*i), bomb.y, 16, 16);
+					tiles[locx-i][locy].Draw();
+					explosionTiles.push(tiles[locx-i][locy]);
+					powerupTiles.push(tiles[locx-i][locy]);
 				}
 				hitLeft = true;
 			}
@@ -259,8 +273,11 @@ function explodeBomb(bomb) {
 				explosionTiles.push(tiles[locx][locy-i]);
 			}
 			else {
-				if(tiles[locx][locy-i].type == 'destroyableWall') {
-					// TODO: destroy the wall
+				if(tiles[locx][locy-i].Type == 'destroyableWall') {
+					tiles[locx][locy-i] = new Tile(context, 'explosion', explImg[1][1], 0, 0, 16, 16, bomb.x, bomb.y-(16*i), 16, 16);
+					tiles[locx][locy-i].Draw();
+					explosionTiles.push(tiles[locx][locy-i]);
+					powerupTiles.push(tiles[locx][locy-i]);
 				}
 				hitUp = true;
 			}
@@ -275,8 +292,11 @@ function explodeBomb(bomb) {
 				explosionTiles.push(tiles[locx][locy+i]);
 			}
 			else {
-				if(tiles[locx][locy+i].type == 'destroyableWall') {
-					// TODO: destroy the wall
+				if(tiles[locx][locy+i].Type == 'destroyableWall') {
+					tiles[locx][locy+i] = new Tile(context, 'explosion', explImg[3][1], 0, 84, 16, 16, bomb.x, bomb.y+(16*i), 16, 16);
+					tiles[locx][locy+i].Draw();
+					explosionTiles.push(tiles[locx][locy+i]);
+					powerupTiles.push(tiles[locx][locy+i]);
 				}
 				hitDown = true;
 			}
@@ -284,9 +304,15 @@ function explodeBomb(bomb) {
 	}
 	
 	setTimeout(function() {
+		// Reset explosion tiles to empty
 		for(var i = 0; i < explosionTiles.length; i++) {
 			tiles[explosionTiles[i].X/16][explosionTiles[i].Y/16] = new Tile(context, 'empty', emptyImg, 52, 1, 16, 16, explosionTiles[i].X, explosionTiles[i].Y, 16, 16);
 			tiles[explosionTiles[i].X/16][explosionTiles[i].Y/16].Draw();
+		}
+		
+		// Check destroyed walls for powerups
+		for(var j = 0; j < powerupTiles.length; j++) {
+			if(rollPowerup()) createPowerup(powerupTiles[j].X/16, powerupTiles[j].Y/16);
 		}
 	}
 	,1000);
