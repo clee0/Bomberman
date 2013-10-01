@@ -7,6 +7,8 @@ hudContext = hudCanvas.getContext('2d');
 canvas.style.border = "black 1px solid";
 hudCanvas.style.border = "black 1px solid";
 
+var gameStarted = false;
+var gameEnded = false;
 var changedTiles = new Array(); // tiles that have been changed
 var explImg = new Array();
 var tiles = new Array(13); // all tiles in game
@@ -55,6 +57,26 @@ var player2Score = 0;
 //startup();
 
 // TODO: give names to players so we know who wins at the end?
+function checkGameTermination() {
+	// If only one player alive, that player wins
+	// If no players alive, draw
+	
+	var livePlayers = new Array();
+	for (var i = 0; i < players.length; i++) {
+		if(players[i].alive)
+			livePlayers.push(players[i]);
+	}
+	
+	if(livePlayers.length == 0) {
+		alert('All players dead: game is a tie');
+		gameEnded = true;
+	}
+	else if(livePlayers.length == 1) {
+		alert(livePlayers[0].name + ' wins!');
+		gameEnded = true;
+	}
+	//console.log(livePlayers.length);
+}
 
 function smallClockUpdate(){
 	currentTime += 1;
@@ -123,7 +145,10 @@ function updateSmallClock(imageNumber){
 
 //use setInteval for game loop?
 clock = self.setInterval(function() {
-	smallClockUpdate();
+	if(gameStarted && !gameEnded) {
+		smallClockUpdate();
+		checkGameTermination();
+	}
 }, 1000);
 
 function startup() {
@@ -213,6 +238,8 @@ function startup() {
 		drawRandomScores();
 		//startFakePowerups();
 	});
+	
+	gameStarted = true;
 }
 
 function startFakePowerups() {
@@ -301,8 +328,8 @@ function loadSmallClock() {
 
 function addPlayers() {
 	// add Player 1
-	players[0] = new Player(context, player1Img, 18, 1, 16, 23, 1*16, 1*16, 16, 16, 2, 3, false);
-	players[1] = new Player(context, player2Img, 18, 1, 16, 23, 11*16, 11*16, 16, 16, 2, 3, false);
+	players[0] = new Player(context, player1Img, 18, 1, 16, 23, 1*16, 1*16, 16, 16, 'Player 1');
+	players[1] = new Player(context, player2Img, 18, 1, 16, 23, 11*16, 11*16, 16, 16, 'Player 2');
 	drawPlayers();
 }
 
@@ -477,6 +504,16 @@ function explodeBomb(bomb, player) {
 		}
 	}
 	
+	// Check if any tiles has a player on it, and kill that player
+	for(var i = 0; i < explosionTiles.length; i++) {
+		for (var j = 0; j < players.length; j++) {
+			if (explosionTiles[i].X == players[j].X && explosionTiles[i].Y == players[j].Y) {
+				players[j].alive = false;
+				//alert('asdf');
+			}
+		}
+	}
+	
 	setTimeout(function() {
 		// Reset explosion tiles to empty
 		for(var i = 0; i < explosionTiles.length; i++) {
@@ -555,77 +592,79 @@ document.addEventListener('keydown', function(event) {
 
 	var p2 = players[1];
 	var x2 = p2.X/16, y2 = p2.Y/16;
-    if(event.keyCode == 37) {
-    	if (!checkWall(x1 - 1, y1)) { // p1 move left
-    		tiles[x1][y1].Draw();
-    		p1.Move('left');
-    		checkPickup(p1);
-    		drawPlayers();
-    	}
-    }
-    else if(event.keyCode == 39) {
-    	if (!checkWall(x1 + 1, y1)) { // p1 move right
-    		tiles[x1][y1].Draw();
-	    	p1.Move('right');
-	    	checkPickup(p1);
-	    	drawPlayers();
-	    }
-    }
-	else if(event.keyCode == 38) {
-		if (!checkWall(x1, y1 - 1)) { // p1 move up
-			tiles[x1][y1].Draw();
-			p1.Move('up');
-			checkPickup(p1);
-			drawPlayers();
+	if(!gameEnded) {
+		if(event.keyCode == 37) {
+			if (!checkWall(x1 - 1, y1)) { // p1 move left
+				tiles[x1][y1].Draw();
+				p1.Move('left');
+				checkPickup(p1);
+				drawPlayers();
+			}
 		}
-	}
-	else if(event.keyCode == 40) {
-		if (!checkWall(x1, y1 + 1)) { // p1 move down
-			tiles[x1][y1].Draw();
-			p1.Move('down');
-			checkPickup(p1);
-			drawPlayers();
+		else if(event.keyCode == 39) {
+			if (!checkWall(x1 + 1, y1)) { // p1 move right
+				tiles[x1][y1].Draw();
+				p1.Move('right');
+				checkPickup(p1);
+				drawPlayers();
+			}
 		}
-	}
-	else if(event.keyCode == 65) { // player 2 moving left
-		if (!checkWall(x2-1, y2)) {
-			tiles[x2][y2].Draw();
-			p2.Move('left');
-			checkPickup(p2);
-			drawPlayers();
+		else if(event.keyCode == 38) {
+			if (!checkWall(x1, y1 - 1)) { // p1 move up
+				tiles[x1][y1].Draw();
+				p1.Move('up');
+				checkPickup(p1);
+				drawPlayers();
+			}
 		}
-	}
-	else if(event.keyCode == 68) { // player 2 moving right
-		if (!checkWall(x2+1, y2)) {
-			tiles[x2][y2].Draw();
-			p2.Move('right');
-			checkPickup(p2);
-			drawPlayers();
+		else if(event.keyCode == 40) {
+			if (!checkWall(x1, y1 + 1)) { // p1 move down
+				tiles[x1][y1].Draw();
+				p1.Move('down');
+				checkPickup(p1);
+				drawPlayers();
+			}
 		}
-	}
-	else if(event.keyCode == 87) { // player 2 moving up
-		if (!checkWall(x2, y2-1)) {
-			tiles[x2][y2].Draw();
-			p2.Move('up');
-			checkPickup(p2);
-			drawPlayers();
+		else if(event.keyCode == 65) { // player 2 moving left
+			if (!checkWall(x2-1, y2)) {
+				tiles[x2][y2].Draw();
+				p2.Move('left');
+				checkPickup(p2);
+				drawPlayers();
+			}
 		}
-	}
-	else if(event.keyCode == 83) { // player 2 moving down
-		if (!checkWall(x2, y2+1)) {
-			tiles[x2][y2].Draw();
-			p2.Move('down');
-			checkPickup(p2);
-			drawPlayers();
+		else if(event.keyCode == 68) { // player 2 moving right
+			if (!checkWall(x2+1, y2)) {
+				tiles[x2][y2].Draw();
+				p2.Move('right');
+				checkPickup(p2);
+				drawPlayers();
+			}
 		}
-	}
-	// Player 1 bomb key
-	else if(event.keyCode == 16) { // shift key
-		dropBomb(p1);
-	}
-	// Player 2 bomb key
-	else if(event.keyCode == 32) { // space key
-		dropBomb(p2);
+		else if(event.keyCode == 87) { // player 2 moving up
+			if (!checkWall(x2, y2-1)) {
+				tiles[x2][y2].Draw();
+				p2.Move('up');
+				checkPickup(p2);
+				drawPlayers();
+			}
+		}
+		else if(event.keyCode == 83) { // player 2 moving down
+			if (!checkWall(x2, y2+1)) {
+				tiles[x2][y2].Draw();
+				p2.Move('down');
+				checkPickup(p2);
+				drawPlayers();
+			}
+		}
+		// Player 1 bomb key
+		else if(event.keyCode == 16 && players[0].alive) { // shift key
+			dropBomb(p1);
+		}
+		// Player 2 bomb key
+		else if(event.keyCode == 32 && players[1].alive) { // space key
+			dropBomb(p2);
+		}
 	}
 });
 

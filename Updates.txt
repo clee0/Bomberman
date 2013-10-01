@@ -1,12 +1,18 @@
 Updates from each day / commit:
 
 ======================== TODO - NEED TO GET THESE DONE ============================
-- Make game end when Players hit fire
 - Add Css & Random other info / stuff to webpage outside of canvas
 - Make other powerups work / do stuff [or get rid of them]
 - Figure out the intro popup box thang
 - What to do to show game ends?
 - [add others if y'all think of them]
+
+10-1-13:
+(chris)
+-Added flags for "game started" and "game ended"
+-Players can die (no longer draws player when dead)
+-Game ends when 0 or 1 players remaining (and congratulates the winner)
+-Keyboard input disabled when game ends
 
 9-30-13: [last update of the night]:
 (alex)

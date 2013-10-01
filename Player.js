@@ -1,4 +1,4 @@
-Player = function(ctx, imageObj, imgoffsetx, imgoffsety, imgwx, imgwy, x, y, newWx, newWy)
+Player = function(ctx, imageObj, imgoffsetx, imgoffsety, imgwx, imgwy, x, y, newWx, newWy, name)
 {
 	this.X = x;          this.imgOffsetX = imgoffsetx;
 	this.Y = y;          this.imgOffsetY = imgoffsety;
@@ -12,13 +12,19 @@ Player = function(ctx, imageObj, imgoffsetx, imgoffsety, imgwx, imgwy, x, y, new
 	this.bombTime = 3;
 	this.canRemoteDetonate = false;
 	this.canKick = false;
+	this.alive = true;
 	
 	this.drawable = false;
+	this.name = name;
 
 	this.Draw = function() {
 		// possibly this.X = imageIndex * 18 && this.Y = 1...?
-		this.Context.drawImage(this.imageObj, this.imgOffsetX, this.imgOffsetY, this.imgWx, this.imgWy, 
-			this.X, this.Y, this.WidthX, this.WidthY);
+		
+		// Only draw player if player is alive
+		if(this.alive) {
+			this.Context.drawImage(this.imageObj, this.imgOffsetX, this.imgOffsetY, this.imgWx, this.imgWy, 
+				this.X, this.Y, this.WidthX, this.WidthY);
+		}
 	};
 
 	this.Move = function(dir) {
