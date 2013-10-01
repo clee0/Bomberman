@@ -14,8 +14,16 @@ Tile = function(ctx, type, imageObj, imgoffsetx, imgoffsety, imgwx, imgwy, x, y,
 	this.imgWy = imgwy; this.WidthY = newWy;
 	this.Context = ctx; this.Type = type;
 	this.imgSlot = 'top';
+	this.isPowerup = false;
 	
 	this.drawable = false;
+
+
+	if (type === 'extra-bomb' || type === 'skate' ||
+		type === 'kick' || type === 'glove' || type === 'fire' ||
+		type === 'disease' || type === 'crane') {
+		this.isPowerup = true;
+	}
 
 	this.Draw = function() {
 		// possibly this.X = imageIndex * 18 && this.Y = 1...?

@@ -211,22 +211,6 @@ function startFakePowerups() {
 	createPowerup(3,9);
 }
 
-function createPowerup(x, y) {
-	var index = Math.floor(Math.random() * types.length);
-	var tileType = types[index]; // from stack overflow
-
-	offsetX = 3 + (index * 17);
-
-	tiles[x][y] = new Tile(context, tileType, powerupImg, offsetX, 3, 16, 16, x*16, y*16, 16, 16, powclock.Index);
-	tiles[x][y].Draw();
-
-	var Name = 'powClock' + powclock.Index;
-	++powclock.Index;
-	powclock[Name] = setInterval(function() {
-		tiles[x][y].shiftImg();
-	}, 400);
-}
-
 function loadHud() {
 	hudContext.drawImage(twoHudImg, 0, 0, 256, 32, 0, 0, 256,32);
 }
@@ -261,6 +245,23 @@ function drawTiles() {
 		}
 	}
 	addPlayers();
+}
+
+function createPowerup(x, y) {
+	var index = Math.floor(Math.random() * types.length);
+	var tileType = types[index]; // from stack overflow
+
+	offsetX = 3 + (index * 17);
+	var tempTile = new Tile(context, tileType, powerupImg, offsetX, 3, 16, 16, x*16, y*16, 16, 16, powclock.Index);
+	tiles[x][y] = tempTile;
+	tiles[x][y].Draw();
+
+	var Name = 'powClock' + powclock.Index;
+	++powclock.Index;
+	powclock[Name] = setInterval(function() {
+		console.log('powerup',tempTile.ClockIndex,'still alive');
+		tiles[x][y].shiftImg();
+	}, 400);
 }
 
 function dropBomb(player) {
@@ -298,15 +299,20 @@ function explodeBomb(bomb, player) {
 	clearBombClock(bomb);
 	var locx = bomb.x/16;
 	var locy = bomb.y/16;
+
 	var explosionTiles = new Array();
 	var powerupTiles = new Array();
+
 	tiles[locx][locy] = new Tile(context, 'explosion', explImg[0], 0, 2, 12, 12, bomb.x, bomb.y, 16, 16);
 	tiles[locx][locy].Draw();
+
 	explosionTiles.push(tiles[locx][locy]);
-	var hitLeft = false; var hitRight = false; var hitUp = false; var hitDown = false;
+	var hitLeft = false, hitRight = false, hitUp = false, hitDown = false;
 	for(var i = 1; i <= bomb.player.bombSize - 1; i++) {
 		if(!hitRight) {
 			if(!tiles[locx+i][locy].isSolid) {
+				if (tiles[locx+i][locy].isPowerup)
+					clearPowerup(locx+i, locy, player);
 				if(i = bomb.player.bombSize - 1)
 					tiles[locx+i][locy] = new Tile(context, 'explosion', explImg[2][1], 84, 0, 16, 16, bomb.x+(16*i), bomb.y, 16, 16);
 				else
@@ -326,6 +332,8 @@ function explodeBomb(bomb, player) {
 		}
 		if(!hitLeft) {
 			if(!tiles[locx-i][locy].isSolid) {
+				if (tiles[locx-i][locy].isPowerup)
+					clearPowerup(locx-i, locy, player);
 				if(i = bomb.player.bombSize - 1)
 					tiles[locx-i][locy] = new Tile(context, 'explosion', explImg[4][1], 0, 0, 16, 16, bomb.x-(16*i), bomb.y, 16, 16);
 				else
@@ -345,6 +353,8 @@ function explodeBomb(bomb, player) {
 		}
 		if(!hitUp) {
 			if(!tiles[locx][locy-i].isSolid) {
+				if (tiles[locx][locy-1].isPowerup)
+					clearPowerup(locx, locy-1, player);
 				if(i = bomb.player.bombSize - 1)
 					tiles[locx][locy-i] = new Tile(context, 'explosion', explImg[1][1], 0, 0, 16, 16, bomb.x, bomb.y-(16*i), 16, 16);
 				else
@@ -364,6 +374,8 @@ function explodeBomb(bomb, player) {
 		}
 		if(!hitDown) {
 			if(!tiles[locx][locy+i].isSolid) {
+				if (tiles[locx][locy+1].isPowerup)
+					clearPowerup(locx, locy+1, player);
 				if(i = bomb.player.bombSize - 1)
 					tiles[locx][locy+i] = new Tile(context, 'explosion', explImg[3][1], 0, 84, 16, 16, bomb.x, bomb.y+(16*i), 16, 16);
 				else
@@ -386,8 +398,9 @@ function explodeBomb(bomb, player) {
 	setTimeout(function() {
 		// Reset explosion tiles to empty
 		for(var i = 0; i < explosionTiles.length; i++) {
-			tiles[explosionTiles[i].X/16][explosionTiles[i].Y/16] = new Tile(context, 'empty', emptyImg, 52, 1, 16, 16, explosionTiles[i].X, explosionTiles[i].Y, 16, 16);
-			tiles[explosionTiles[i].X/16][explosionTiles[i].Y/16].Draw();
+			var x = explosionTiles[i].X, y = explosionTiles[i].Y;
+			tiles[x/16][y/16] = new Tile(context, 'empty', emptyImg, 52, 1, 16, 16, x, y, 16, 16);
+			tiles[x/16][y/16].Draw();
 		}
 		
 		// Check destroyed walls for powerups
