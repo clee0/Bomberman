@@ -52,7 +52,7 @@ var player2Kills = 0;
 var player1Score = 0;
 var player2Score = 0;
 
-startup();
+//startup();
 
 // TODO: give names to players so we know who wins at the end?
 
