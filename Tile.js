@@ -1,4 +1,4 @@
-Tile = function(ctx, type, imageObj, imgoffsetx, imgoffsety, imgwx, imgwy, x, y, newWx, newWy, powClockIndex)
+Tile = function(ctx, type, imageObj, imgoffsetx, imgoffsety, imgwx, imgwy, x, y, newWx, newWy, clockIndex)
 {
 	if (type === 'wall' || type === 'destroyableWall') {
 		this.isSolid = true;
@@ -6,7 +6,7 @@ Tile = function(ctx, type, imageObj, imgoffsetx, imgoffsety, imgwx, imgwy, x, y,
 		this.isSolid = false;
 	}
 
-	this.powerupClockIndex = powClockIndex;
+	this.ClockIndex = clockIndex;
 	this.imageObj = imageObj
 	this.X = x;         this.imgOffsetX = imgoffsetx;
 	this.Y = y;         this.imgOffsetY = imgoffsety;

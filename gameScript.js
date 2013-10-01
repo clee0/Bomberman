@@ -39,6 +39,9 @@ explImg[4] = new Array(); explImg[4][0] = new Image(); explImg[4][1] = new Image
 var powclock = {
 	Index: 0
 };
+var bombclocks = {
+	Index: 0
+}
 
 startup();
 
@@ -92,17 +95,17 @@ function updateSmallClock(imageNumber){
 //use setInteval for game loop?
 clock = self.setInterval(function() {
 	smallClockUpdate();
-	for(var i = 0; i < bombs.length; i++) {
-		if(bombs[i].hasExploded) {
-			// TODO: Call function to explode bomb
-			explodeBomb(bombs[i]);
-			bombs.splice(i,1);
-		}
-		else {
-			bombs[i].countdown();
-			//bombs[i].draw();
-		}
-	}
+	// for(var i = 0; i < bombs.length; i++) {
+	// 	if(bombs[i].hasExploded) {
+	// 		// TODO: Call function to explode bomb
+	// 		explodeBomb(bombs[i]);
+	// 		bombs.splice(i,1);
+	// 	}
+	// 	else {
+	// 		bombs[i].countdown();
+	// 		//bombs[i].draw();
+	// 	}
+	// }
  }, 1000);
 
 function startup() {
@@ -168,7 +171,7 @@ function startup() {
 		clockone.src = getTileSrc('Hud/clockone.png',hudContext),
 		clocktwo.src = getTileSrc('Hud/clocktwo.png',hudContext),
 		clockmid.src = getTileSrc('Hud/clockmid.png',hudContext),
-		
+
 		// explImg[0].src = getTileSrc('bombs/bombcenter.png', context),
 		// explImg[1].src = getTileSrc('bombs/bombmid.png', context),
 		// explImg[2].src = getTileSrc('bombs/bombend.png', context),
@@ -188,7 +191,7 @@ function startup() {
 		loadHud();
 		loadSmallClock();
 		loadMap1();
-		startFakePowerups();
+		//startFakePowerups();
 	});
 }
 
@@ -261,9 +264,21 @@ function drawTiles() {
 }
 
 function dropBomb(player) {
-	tempBomb = new Bomb(bombImg, 0, 0, 14, 18, 16, 16, player);
-	bombs[bombs.length] = tempBomb;
-	tiles[tempBomb.x/16][tempBomb.y/16] = new Tile(context, 'bomb', bombImg, 0, 0, 14, 18, tempBomb.x, tempBomb.y, 16, 16);
+	var tempBomb = new Bomb(bombImg, 0, 0, 14, 18, 16, 16, player, bombclocks.Index);
+	var X = tempBomb.x/16; var Y = tempBomb.y/16;
+
+	tiles[X][Y] = new Tile(context, 'bomb', bombImg, 0, 0,
+		14, 18, tempBomb.x, tempBomb.y, 16, 16, bombclocks.Index);
+
+	tiles[X][Y].Draw();
+
+	var Name = 'bombClock' + bombclocks.Index;
+	++bombclocks.Index;
+	bombclocks[Name] = [setInterval(function() {
+		if (tempBomb.countdown()) {
+			explodeBomb(tempBomb);
+		}
+	}, 400),tempBomb];
 }
 
 // 30% to return true (checking if wall drops powerup)
@@ -275,6 +290,7 @@ function rollPowerup() {
 }
 	
 function explodeBomb(bomb) {
+	clearBombClock(bomb);
 	var locx = bomb.x/16;
 	var locy = bomb.y/16;
 	var explosionTiles = new Array();
@@ -504,8 +520,13 @@ function checkPickup(player) {
 	}
 }
 
+function clearBombClock(bomb) {
+	var index = bomb.ClockIndex;
+	clearInterval(bombclocks['bombClock' + index][0]);
+}
+
 function clearPowerup(x, y, player) {
-	clearInterval(powclock['powClock' + tiles[x][y].powerupClockIndex]);
+	clearInterval(powclock['powClock' + tiles[x][y].ClockIndex]);
 	tiles[x][y] = new Tile(context, 'empty', emptyImg, 52, 1, 16, 16, player.X, player.Y, 16, 16);
 	tiles[x][y].Draw();
 	player.Draw();

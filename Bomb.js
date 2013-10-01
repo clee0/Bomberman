@@ -1,4 +1,4 @@
-Bomb = function(imgObj, imgoffsetx, imgoffsety, imgwx, imgwy, newWx, newWy, player) {
+Bomb = function(imgObj, imgoffsetx, imgoffsety, imgwx, imgwy, newWx, newWy, player, clockIndex) {
 	
 	this.imgObj = imgObj;
 	this.player = player;
@@ -7,6 +7,7 @@ Bomb = function(imgObj, imgoffsetx, imgoffsety, imgwx, imgwy, newWx, newWy, play
 	this.imgWx = imgwx; this.WidthX = newWx;
 	this.imgWy = imgwy; this.WidthY = newWy;
 	this.Context = player.Context;
+	this.ClockIndex = clockIndex;
 	
 	this.size = player.bombSize;
 	this.time = 3;
@@ -25,5 +26,6 @@ Bomb = function(imgObj, imgoffsetx, imgoffsety, imgwx, imgwy, newWx, newWy, play
 		else {
 			this.time--;
 		}
+		return this.hasExploded;
 	};
 }
