@@ -1,6 +1,6 @@
 Tile = function(ctx, type, imageObj, imgoffsetx, imgoffsety, imgwx, imgwy, x, y, newWx, newWy, clockIndex)
 {
-	if (type === 'wall' || type === 'destroyableWall') {
+	if (type === 'wall' || type === 'destroyableWall' || type === 'bomb') {
 		this.isSolid = true;
 	} else {
 		this.isSolid = false;

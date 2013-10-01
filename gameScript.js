@@ -25,6 +25,7 @@ var clocktwo = new Image();
 var clockmid = new Image();
 var wallImg = new Image();
 var player1Img = new Image();
+var player2Img = new Image();
 var emptyImg = new Image();
 var bombImg = new Image();
 var twoHudImg = new Image();
@@ -161,13 +162,14 @@ function startup() {
 	}
 
 	var items = [
-		player1Img.src = getTileSrc('Player assets/playersheet2.png', context),
+		player1Img.src = getTileSrc('Player assets/player1sheet2.png', context),
+		player2Img.src = getTileSrc('Player assets/player2sheet1.png', context),
 		wallImg.src = getTileSrc('maptiles/maptiles.jpg', context),
 		emptyImg.src = getTileSrc('maptiles/maptiles.jpg', context),
 		bombImg.src = getTileSrc('bombs/bombs.jpg', context),
 		twoHudImg.src = getTileSrc('Hud/twoplayerhud.png', hudContext),
+		// twoHudImg.src = getTileSrc('Hud/twoplayerhud.png', hudContext),
 		powerupImg.src = getTileSrc('powerups/powerups.jpg', context),
-		twoHudImg.src = getTileSrc('Hud/twoplayerhud.png', hudContext),
 		clockone.src = getTileSrc('Hud/clockone.png',hudContext),
 		clocktwo.src = getTileSrc('Hud/clocktwo.png',hudContext),
 		clockmid.src = getTileSrc('Hud/clockmid.png',hudContext),
@@ -222,6 +224,7 @@ function loadSmallClock() {
 function addPlayers() {
 	// add Player 1
 	players[0] = new Player(context, player1Img, 18, 1, 16, 23, 1*16, 1*16, 16, 16, 2, 3, false);
+	players[1] = new Player(context, player2Img, 18, 1, 16, 23, 11*16, 11*16, 16, 16, 2, 3, false);
 	drawPlayers();
 }
 
@@ -462,16 +465,19 @@ function loadMap1() {
 	drawTiles();
 }
 
-function player(locx, locy) {
-	this.locx = locx;
-	this.locy = locy;
-}
+// function player(locx, locy) {
+// 	this.locx = locx;
+// 	this.locy = locy;
+// }
 
 document.addEventListener('keydown', function(event) {
 	var p1 = players[0];
-	var x1 = p1.X/16; var y1 = p1.Y/16;
+	var x1 = p1.X/16, y1 = p1.Y/16;
+
+	var p2 = players[1];
+	var x2 = p2.X/16, y2 = p2.Y/16;
     if(event.keyCode == 37) {
-    	if (!checkWall(x1 - 1, y1)) {
+    	if (!checkWall(x1 - 1, y1)) { // p1 move left
     		tiles[x1][y1].Draw();
     		p1.Move('left');
     		checkPickup(p1);
@@ -479,7 +485,7 @@ document.addEventListener('keydown', function(event) {
     	}
     }
     else if(event.keyCode == 39) {
-    	if (!checkWall(x1 + 1, y1)) {
+    	if (!checkWall(x1 + 1, y1)) { // p1 move right
     		tiles[x1][y1].Draw();
 	    	p1.Move('right');
 	    	checkPickup(p1);
@@ -487,7 +493,7 @@ document.addEventListener('keydown', function(event) {
 	    }
     }
 	else if(event.keyCode == 38) {
-		if (!checkWall(x1, y1 - 1)) {
+		if (!checkWall(x1, y1 - 1)) { // p1 move up
 			tiles[x1][y1].Draw();
 			p1.Move('up');
 			checkPickup(p1);
@@ -495,16 +501,52 @@ document.addEventListener('keydown', function(event) {
 		}
 	}
 	else if(event.keyCode == 40) {
-		if (!checkWall(x1, y1 + 1)) {
+		if (!checkWall(x1, y1 + 1)) { // p1 move down
 			tiles[x1][y1].Draw();
 			p1.Move('down');
 			checkPickup(p1);
 			drawPlayers();
 		}
 	}
+	else if(event.keyCode == 65) { // player 2 moving left
+		if (!checkWall(x2-1, y2)) {
+			tiles[x2][y2].Draw();
+			p2.Move('left');
+			checkPickup(p2);
+			drawPlayers();
+		}
+	}
+	else if(event.keyCode == 68) { // player 2 moving right
+		if (!checkWall(x2+1, y2)) {
+			tiles[x2][y2].Draw();
+			p2.Move('right');
+			checkPickup(p2);
+			drawPlayers();
+		}
+	}
+	else if(event.keyCode == 87) { // player 2 moving up
+		if (!checkWall(x2, y2-1)) {
+			tiles[x2][y2].Draw();
+			p2.Move('up');
+			checkPickup(p2);
+			drawPlayers();
+		}
+	}
+	else if(event.keyCode == 83) { // player 2 moving down
+		if (!checkWall(x2, y2+1)) {
+			tiles[x2][y2].Draw();
+			p2.Move('down');
+			checkPickup(p2);
+			drawPlayers();
+		}
+	}
 	// Player 1 bomb key
-	else if(event.keyCode == 16) {
+	else if(event.keyCode == 16) { // shift key
 		dropBomb(p1);
+	}
+	// Player 2 bomb key
+	else if(event.keyCode == 32) { // space key
+		dropBomb(p2);
 	}
 });
 
