@@ -1,5 +1,19 @@
 Updates from each day / commit:
 
+======================== TODO - NEED TO GET THESE DONE ============================
+- Make game end when Players hit fire
+- Add Css & Random other info / stuff to webpage outside of canvas
+- Make other powerups work / do stuff [or get rid of them]
+- Figure out the intro popup box thang
+- What to do to show game ends?
+- [add others if y'all think of them]
+
+9-30-13: [last update of the night]:
+(alex)
+- Game now has timer that sends alert when all blocks have finished (End Game)
+- Two Players
+- Points can be drawn now [kills & scores]
+
 9-30-13:
 (alex)
 - made function called 'createPowerup()'
