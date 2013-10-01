@@ -5,7 +5,9 @@ Updates from each day / commit:
 - made function called 'createPowerup()'
   - It contains a useful way of making new timers associated w/ each individual powerup
   - This may be useful for bomb dropping too.
-  - Threw up Kyle's code for clocking stuff
+- Threw up Kyle's code for clocking stuff
+- Added Player 2
+- Recolored Explosion Sprites
 
 9-29-13:
 (alex)

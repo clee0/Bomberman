@@ -44,16 +44,37 @@ var bombclocks = {
 	Index: 0
 }
 
+var currentTime = 1;
+var timeBlocks = 0;
+
 startup();
 
 // TODO: give names to players so we know who wins at the end?
 
 function smallClockUpdate(){
-	var currentTime = new Date();
-	var currentSeconds = currentTime.getSeconds();
-	modTime = (currentSeconds%8)
+	currentTime += 1;
+	// var currentTime = new Date();
+	// var currentSeconds = currentTime.getSeconds();
+	// modTime = (currentSeconds%8);
+	modTime = currentTime % 8;
+
 	//console.log(modTime);
 	updateSmallClock(modTime);
+
+	if (timeBlocks === 28) {
+		// GAME ENDS BY TIME DELAY
+		alert('time up!  Game over');
+	}
+
+	if ((currentTime % 16) == 0) {
+		hudContext.fillStyle="black";
+		if (timeBlocks < 14) {
+			hudContext.fillRect(10 + (8*timeBlocks),26,4,3);
+		} else {
+			hudContext.fillRect(26 + (8*timeBlocks),26,4,3);
+		}
+		++timeBlocks;
+	}
 }
 	
 function drawRotatedImage(ctx,image, x, y, angle,offsetx,offsety) { 
@@ -96,18 +117,7 @@ function updateSmallClock(imageNumber){
 //use setInteval for game loop?
 clock = self.setInterval(function() {
 	smallClockUpdate();
-	// for(var i = 0; i < bombs.length; i++) {
-	// 	if(bombs[i].hasExploded) {
-	// 		// TODO: Call function to explode bomb
-	// 		explodeBomb(bombs[i]);
-	// 		bombs.splice(i,1);
-	// 	}
-	// 	else {
-	// 		bombs[i].countdown();
-	// 		//bombs[i].draw();
-	// 	}
-	// }
- }, 1000);
+}, 1000);
 
 function startup() {
     if (context) {
