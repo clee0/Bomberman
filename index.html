@@ -5,6 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<body bgcolor="#E6E6FA">
 	<title>Bomberman</title>
 	<link rel="stylesheet" type="text/css" href="gameCss.css">
 	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
@@ -19,13 +20,12 @@
     </script>
 </head>
 <body>
-	<div id="dialog" title="Please select number of players: ">
-	    <input type='radio' value='2player' name='myRadio1'>Two players
-	    <input type='radio' value='3player' name='myRadio2'>Three players
-	    <input type='radio' value='4player' name='myRadio3'>Four players
+	<div id="dialog" title="Welcome to Bomberman! ">
+		The current mode is two players. Once close is pressed the game will begin. 
+	    
     </div>
 	<div>
-		<h1>Time to play some <u>Bomberman!!!</u></h1>
+		<h1><u>Bomberman!!!</u></h1>
 	</div>
 	<div id="hud-canvas-container">
 		<canvas id="hudCanvas">
@@ -35,6 +35,82 @@
 		<canvas id="gameCanvas">
 			If you read this, your browser may not support canvases!</canvas>
 	</div>
+
+	<div class="playerControls" >
+                <table border ="3">
+					<tr>
+						<TH COLSPAN="3">
+							<H3><BR>Play Controls for Bomberman</H3>
+						</TH>
+					</tr>
+                    <tr>
+                        <td  width="120%">
+                            Controls
+                        </td>
+                        <td width="120%">
+                            Player One
+                        </td>
+                        <td width="120%">
+                            Player Two
+                        </td>
+                    </tr>
+                    <tr>
+                        <td >
+                            Move up
+                        </td>
+                        <td>
+                            Arrow UP
+                        </td>
+                        <td>
+                            Key W
+                        </td>
+                    </tr>
+                    <tr>
+                        <td >
+                            Move down
+                        </td>
+                        <td>
+                            Arrow DOWN
+                        </td>
+                        <td>
+                            Key S
+                        </td>
+                    </tr>
+                    <tr>
+                        <td >
+                            Move left
+                        </td>
+                        <td>
+                            Arrow LEFT
+                        </td>
+                        <td>
+                            Key A
+                        </td>
+                    </tr>
+                    <tr>
+                        <td >
+                            Move right
+                        </td>
+                        <td>
+                            Arrow RIGHT
+                        </td>
+                        <td>
+                            Key D
+                        </td>
+                    </tr>
+					<tr>
+                        <td >
+                            Plant bomb
+                        </td>
+                        <td>
+                            Key Shift
+                        </td>
+                        <td>
+                            Key Space
+                        </td>
+                    </tr>
+                </table>
+            </div>
 	<!-- <button onclick="stopClock()">Stop Game Loop!</button> -->
 	<!-- <footer>
         <p><a href="index.html">home</a> | <a href="about_us.html">about us</a> | <a href="contact.html">contact</a></p>

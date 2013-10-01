@@ -11,9 +11,43 @@ canvas {
 div#dialog{
     width: 100%;
     text-align: center;
-    background-color: #FFFFFF;
+    background-color: #00FFFF;
 }
 
 .ui-dialog-titlebar{
-	background-color: #FFFFFF;
+	background-color: #00FFFF;
 }
+h1
+{
+border: 5px groove #0000FF;
+border-radius:10px;
+color:#FFFFFF;
+margin-left: 396px;
+margin-right: 396px;
+background: -moz-linear-gradient( top left, white, black 25% );
+background: -webkit-linear-gradient( top left, white, black 25% );
+background: -o-linear-gradient( top left, white, black 25% );
+background: -khtml-linear-gradient( top left, white, black 25% );
+background: -ms-linear-gradient( top left, white, black 25% );
+background: linear-gradient( top left, white, black 25% );
+text-shadow: 5px 5px 5px #FF0000;
+text-align: center;
+} 
+tr{
+border: 5px groove #0000FF;
+}
+
+.playerControls{
+margin-left: 396px;
+margin-right: 396px;
+color: white;
+border: 5px groove #0000FF;
+background: -moz-linear-gradient( top left, white, black 25% );
+background: -webkit-linear-gradient( top left, white, black 25% );
+background: -o-linear-gradient( top left, white, black 25% );
+background: -khtml-linear-gradient( top left, white, black 25% );
+background: -ms-linear-gradient( top left, white, black 25% );
+background: linear-gradient( top left, white, black 25% );
+border-radius:10px;
+}
+
