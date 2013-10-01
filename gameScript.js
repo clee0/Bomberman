@@ -264,21 +264,25 @@ function drawTiles() {
 }
 
 function dropBomb(player) {
-	var tempBomb = new Bomb(bombImg, 0, 0, 14, 18, 16, 16, player, bombclocks.Index);
-	var X = tempBomb.x/16; var Y = tempBomb.y/16;
+	if (player.bombCount > 0) {
+		--player.bombCount;
+		var tempBomb = new Bomb(bombImg, 0, 0, 14, 18, 16, 16, player, bombclocks.Index);
+		var X = tempBomb.x/16; var Y = tempBomb.y/16;
 
-	tiles[X][Y] = new Tile(context, 'bomb', bombImg, 0, 0,
-		14, 18, tempBomb.x, tempBomb.y, 16, 16, bombclocks.Index);
+		tiles[X][Y] = new Tile(context, 'bomb', bombImg, 0, 0,
+			14, 18, tempBomb.x, tempBomb.y, 16, 16, bombclocks.Index);
 
-	tiles[X][Y].Draw();
+		tiles[X][Y].Draw();
 
-	var Name = 'bombClock' + bombclocks.Index;
-	++bombclocks.Index;
-	bombclocks[Name] = [setInterval(function() {
-		if (tempBomb.countdown()) {
-			explodeBomb(tempBomb);
-		}
-	}, 400),tempBomb];
+		var Name = 'bombClock' + bombclocks.Index;
+		++bombclocks.Index;
+		bombclocks[Name] = setInterval(function() {
+			console.log('bomb',tempBomb.ClockIndex,'still alive');
+			if (tempBomb.countdown()) {
+				explodeBomb(tempBomb, player);
+			}
+		}, 400);
+	}
 }
 
 // 30% to return true (checking if wall drops powerup)
@@ -289,7 +293,8 @@ function rollPowerup() {
 	return false;
 }
 	
-function explodeBomb(bomb) {
+function explodeBomb(bomb, player) {
+	++player.bombCount;
 	clearBombClock(bomb);
 	var locx = bomb.x/16;
 	var locy = bomb.y/16;
@@ -522,7 +527,7 @@ function checkPickup(player) {
 
 function clearBombClock(bomb) {
 	var index = bomb.ClockIndex;
-	clearInterval(bombclocks['bombClock' + index][0]);
+	clearInterval(bombclocks['bombClock' + index]);
 }
 
 function clearPowerup(x, y, player) {
