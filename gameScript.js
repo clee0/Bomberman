@@ -166,9 +166,8 @@ function startup() {
 		player2Img.src = getTileSrc('Player assets/player2sheet1.png', context),
 		wallImg.src = getTileSrc('maptiles/maptiles.jpg', context),
 		emptyImg.src = getTileSrc('maptiles/maptiles.jpg', context),
-		bombImg.src = getTileSrc('bombs/bombs.jpg', context),
+		bombImg.src = getTileSrc('bombs/bombs.png', context),
 		twoHudImg.src = getTileSrc('Hud/twoplayerhud.png', hudContext),
-		// twoHudImg.src = getTileSrc('Hud/twoplayerhud.png', hudContext),
 		powerupImg.src = getTileSrc('powerups/powerups.jpg', context),
 		clockone.src = getTileSrc('Hud/clockone.png',hudContext),
 		clocktwo.src = getTileSrc('Hud/clocktwo.png',hudContext),
@@ -277,6 +276,7 @@ function dropBomb(player) {
 			14, 18, tempBomb.x, tempBomb.y, 16, 16, bombclocks.Index);
 
 		tiles[X][Y].Draw();
+		player.Draw();
 
 		var Name = 'bombClock' + bombclocks.Index;
 		++bombclocks.Index;
