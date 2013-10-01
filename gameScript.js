@@ -30,6 +30,7 @@ var emptyImg = new Image();
 var bombImg = new Image();
 var twoHudImg = new Image();
 var powerupImg = new Image();
+var hudNumbers = new Image();
 explImg[0] = new Image();
 explImg[1] = new Array(); explImg[1][0] = new Image(); explImg[1][1] = new Image();
 explImg[2] = new Array(); explImg[2][0] = new Image(); explImg[2][1] = new Image();
@@ -64,6 +65,8 @@ function smallClockUpdate(){
 	if (timeBlocks === 28) {
 		// GAME ENDS BY TIME DELAY
 		alert('time up!  Game over');
+		clearInterval(clock);
+
 	}
 
 	if ((currentTime % 16) == 0) {
@@ -182,6 +185,7 @@ function startup() {
 		clockone.src = getTileSrc('Hud/clockone.png',hudContext),
 		clocktwo.src = getTileSrc('Hud/clocktwo.png',hudContext),
 		clockmid.src = getTileSrc('Hud/clockmid.png',hudContext),
+		hudNumbers.src = getTileSrc('Hud/hudnumbers.jpg', hudContext),
 
 		// explImg[0].src = getTileSrc('bombs/bombcenter.png', context),
 		// explImg[1].src = getTileSrc('bombs/bombmid.png', context),
@@ -223,7 +227,40 @@ function startFakePowerups() {
 }
 
 function loadHud() {
+	// draw main hud image:
 	hudContext.drawImage(twoHudImg, 0, 0, 256, 32, 0, 0, 256,32);
+
+	// numbers:
+	// player1 kill score: x=24,  y=9, wx=7, wy=14.
+	// player2 kill score: x=160, y=9, wx=7, wy=14.
+	// 0: x=1 or x=46;   1: x=56;
+	// 2: x=66;  ... etc.
+	// draw player kills:
+	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 160, 9, 7, 14);
+	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 24, 9, 7, 14);
+
+	// player 1 x score: [48][55][62][69][76][83][90][97][104]
+	// draw player score:
+	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 104, 9, 7, 14);
+	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 97, 9, 7, 14);
+	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 90, 9, 7, 14);
+	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 83, 9, 7, 14);
+	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 76, 9, 7, 14);
+	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 69, 9, 7, 14);
+	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 62, 9, 7, 14);
+	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 55, 9, 7, 14);
+	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 48, 9, 7, 14);
+	// player 2 x score: [184][191][198][205][212][219][226][233][240]
+	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 240, 9, 7, 14);
+	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 233, 9, 7, 14);
+	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 226, 9, 7, 14);
+	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 219, 9, 7, 14);
+	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 212, 9, 7, 14);
+	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 205, 9, 7, 14);
+	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 198, 9, 7, 14);
+	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 191, 9, 7, 14);
+	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 184, 9, 7, 14);
+
 }
 
 function loadSmallClock() {	
