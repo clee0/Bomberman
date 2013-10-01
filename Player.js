@@ -14,6 +14,9 @@ Player = function(ctx, imageObj, imgoffsetx, imgoffsety, imgwx, imgwy, x, y, new
 	this.canKick = false;
 	this.alive = true;
 	
+	this.lives = 3;
+	this.score = 0;
+	
 	this.drawable = false;
 	this.name = name;
 

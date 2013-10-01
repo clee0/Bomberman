@@ -49,10 +49,7 @@ var bombclocks = {
 
 var currentTime = 1;
 var timeBlocks = 0;
-var player1Kills = 0;
-var player2Kills = 0;
-var player1Score = 0;
-var player2Score = 0;
+var scores = new Array();
 
 //startup();
 
@@ -67,15 +64,21 @@ function checkGameTermination() {
 			livePlayers.push(players[i]);
 	}
 	
-	if(livePlayers.length == 0) {
-		alert('All players dead: game is a tie');
+	if(livePlayers.length == 0 || livePlayers.length == 1) {
+		var winnerIndex = -1;
+		var maxScore = 0;
+		for(var j = 0; j < players.length; j++) {
+			if(players[j].score > maxScore) {
+				winnerIndex = j;
+				maxScore = players[j].score;
+			}
+		}
+		if(winnerIndex >= 0)
+			alert(players[winnerIndex].name + ' wins with ' + players[winnerIndex].score.toString());
+		else
+			alert('Game is a draw');
 		gameEnded = true;
 	}
-	else if(livePlayers.length == 1) {
-		alert(livePlayers[0].name + ' wins!');
-		gameEnded = true;
-	}
-	//console.log(livePlayers.length);
 }
 
 function smallClockUpdate(){
@@ -90,7 +93,7 @@ function smallClockUpdate(){
 
 	if (timeBlocks === 28) {
 		// GAME ENDS BY TIME DELAY
-		alert('time up!  Game over');
+		alert('Game over by timeout');
 		clearInterval(clock);
 
 	}
@@ -148,6 +151,8 @@ clock = self.setInterval(function() {
 	if(gameStarted && !gameEnded) {
 		smallClockUpdate();
 		checkGameTermination();
+		if(players.length != 0)
+			updateHud();
 	}
 }, 1000);
 
@@ -235,7 +240,7 @@ function startup() {
 		loadHud();
 		loadSmallClock();
 		loadMap1();
-		drawRandomScores();
+		//drawRandomScores();
 		//startFakePowerups();
 	});
 	
@@ -315,11 +320,21 @@ function loadHud() {
 	drawNumber(3, 'p1', 'kills');
 	drawNumber(7, 'p2', 'kills');
 	drawNumber(6, 'p1', 'score');
-	drawNumber(800, 'p2', 'score');
+	drawNumber(8, 'p2', 'score');
 
 	// player 1 x score: [48][55][62][69][76][83][90][97][104]
 	// player 2 x score: [184][191][198][205][212][219][226][233][240]
 
+}
+
+function updateHud() {
+	for(var i = 0; i < players.length; i++) {
+		scores[i] = players[i].score;
+	}
+	drawNumber(players[0].lives, 'p1', 'kills');
+	drawNumber(players[1].lives, 'p2', 'kills');
+	drawNumber(scores[0], 'p1', 'score');
+	drawNumber(scores[1], 'p2', 'score');
 }
 
 function loadSmallClock() {	
@@ -367,7 +382,7 @@ function createPowerup(x, y) {
 	var Name = 'powClock' + powclock.Index;
 	++powclock.Index;
 	powclock[Name] = setInterval(function() {
-		console.log('powerup',tempTile.ClockIndex,'still alive');
+		//console.log('powerup',tempTile.ClockIndex,'still alive');
 		tiles[x][y].shiftImg();
 	}, 400);
 }
@@ -387,7 +402,7 @@ function dropBomb(player) {
 		var Name = 'bombClock' + bombclocks.Index;
 		++bombclocks.Index;
 		bombclocks[Name] = setInterval(function() {
-			console.log('bomb',tempBomb.ClockIndex,'still alive');
+			//console.log('bomb',tempBomb.ClockIndex,'still alive');
 			if (tempBomb.countdown()) {
 				explodeBomb(tempBomb, player);
 			}
@@ -508,8 +523,11 @@ function explodeBomb(bomb, player) {
 	for(var i = 0; i < explosionTiles.length; i++) {
 		for (var j = 0; j < players.length; j++) {
 			if (explosionTiles[i].X == players[j].X && explosionTiles[i].Y == players[j].Y) {
-				players[j].alive = false;
-				//alert('asdf');
+				players[j].lives--;
+				if(player != players[j])
+					player.score += 10;
+				if(players[j].lives == 0)
+					players[j].alive = false;
 			}
 		}
 	}
@@ -688,6 +706,7 @@ function checkPickup(player) {
 		clearPowerup(x, y, player);
 	} else if (tiles[x][y].Type === 'fire') {
 		// increase blast length?
+		player.bombSize++;
 		clearPowerup(x, y, player);
 	} else if (tiles[x][y].Type === 'disease') {
 		// disease effect for player?
