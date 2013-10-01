@@ -47,6 +47,10 @@ var bombclocks = {
 
 var currentTime = 1;
 var timeBlocks = 0;
+var player1Kills = 0;
+var player2Kills = 0;
+var player1Score = 0;
+var player2Score = 0;
 
 startup();
 
@@ -206,6 +210,7 @@ function startup() {
 		loadHud();
 		loadSmallClock();
 		loadMap1();
+		drawRandomScores();
 		//startFakePowerups();
 	});
 }
@@ -226,40 +231,67 @@ function startFakePowerups() {
 	createPowerup(3,9);
 }
 
+function drawNumber(number, player, type) {
+	var wx = 7,         wy = 14;
+	var X, Y = 9;
+	var imgX = 46,      imgY = 3; // 46 is where 0 starts - 10 px btw each #
+
+	if (number > 999999999) {
+		alert('cannot draw that high of a number in ' + player + ' ' + type);
+	}
+	if (player === 'p1') {
+		if (type === 'kills' && number < 10) {
+			X = 24;
+		} else if (type === 'score') {
+			X = 104;
+		} else {
+			alert('cannot draw that high of a number in ' + player + ' ' + type);
+		}
+	} else if (player === 'p2') {
+		if (type === 'kills' && number < 10) {
+			X = 160;
+		} else if (type === 'score') {
+			X = 240;
+		} else {
+			alert('cannot draw that high of a number in ' + player + ' ' + type);
+		}
+	} else {
+		alert('error here!');
+	}
+
+	var num = number;
+	var intArray = [0];
+	if (num != 0) {
+		intArray = [];
+		for (var i = 0; i < num;) {
+			intArray.push(num % 10);
+			num = Math.floor(num/10);
+		}
+	}
+	for (var i = 0; i < intArray.length; i++) {
+		hudContext.drawImage(hudNumbers, 46+(intArray[i]*10), imgY, wx, wy, X-(i*7), Y, wx, wy);
+	}
+}
+
+function drawRandomScores() {
+	drawNumber(9, 'p1', 'kills');
+	drawNumber(0, 'p2', 'kills');
+	drawNumber(253605, 'p1', 'score');
+	drawNumber(999999999, 'p2', 'score');
+}
+
 function loadHud() {
 	// draw main hud image:
 	hudContext.drawImage(twoHudImg, 0, 0, 256, 32, 0, 0, 256,32);
 
-	// numbers:
-	// player1 kill score: x=24,  y=9, wx=7, wy=14.
-	// player2 kill score: x=160, y=9, wx=7, wy=14.
-	// 0: x=1 or x=46;   1: x=56;
-	// 2: x=66;  ... etc.
 	// draw player kills:
-	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 160, 9, 7, 14);
-	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 24, 9, 7, 14);
+	drawNumber(3, 'p1', 'kills');
+	drawNumber(7, 'p2', 'kills');
+	drawNumber(6, 'p1', 'score');
+	drawNumber(800, 'p2', 'score');
 
 	// player 1 x score: [48][55][62][69][76][83][90][97][104]
-	// draw player score:
-	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 104, 9, 7, 14);
-	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 97, 9, 7, 14);
-	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 90, 9, 7, 14);
-	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 83, 9, 7, 14);
-	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 76, 9, 7, 14);
-	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 69, 9, 7, 14);
-	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 62, 9, 7, 14);
-	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 55, 9, 7, 14);
-	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 48, 9, 7, 14);
 	// player 2 x score: [184][191][198][205][212][219][226][233][240]
-	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 240, 9, 7, 14);
-	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 233, 9, 7, 14);
-	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 226, 9, 7, 14);
-	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 219, 9, 7, 14);
-	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 212, 9, 7, 14);
-	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 205, 9, 7, 14);
-	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 198, 9, 7, 14);
-	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 191, 9, 7, 14);
-	hudContext.drawImage(hudNumbers, 46, 3, 7, 14, 184, 9, 7, 14);
 
 }
 
