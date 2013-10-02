@@ -82,12 +82,8 @@ function checkGameTermination() {
 
 function smallClockUpdate(){
 	currentTime += 1;
-	// var currentTime = new Date();
-	// var currentSeconds = currentTime.getSeconds();
-	// modTime = (currentSeconds%8);
 	modTime = currentTime % 8;
 
-	//console.log(modTime);
 	updateSmallClock(modTime);
 
 	if (timeBlocks === 28) {
@@ -306,23 +302,9 @@ function drawNumber(number, player, type) {
 
 //TODO: Reset HUD scores & Stuff when game restarts?
 
-// function drawRandomScores() {
-// 	drawNumber(9, 'p1', 'kills');
-// 	drawNumber(0, 'p2', 'kills');
-// 	drawNumber(253605, 'p1', 'score');
-// 	drawNumber(999999999, 'p2', 'score');
-// }
-
 function loadHud() {
 	// draw main hud image:
 	hudContext.drawImage(twoHudImg, 0, 0, 256, 32, 0, 0, 256,32);
-
-	// draw player kills:
-	// drawNumber(3, 'p1', 'kills');
-	// drawNumber(7, 'p2', 'kills');
-	// drawNumber(6, 'p1', 'score');
-	// drawNumber(8, 'p2', 'score');
-
 	// player 1 x score: [48][55][62][69][76][83][90][97][104]
 	// player 2 x score: [184][191][198][205][212][219][226][233][240]
 
@@ -369,7 +351,6 @@ function createPowerup(x, y) {
 	var index = Math.floor(Math.random() * types.length);
 	var offsetX;
 	var tileType = types[index];
-	console.log(types.length);
 
 	if (index === 0) {
 		offsetX = 3 + (0 * 17);
@@ -447,6 +428,8 @@ function explodeBomb(bomb, player) {
 				if(tiles[locx+i][locy].Type == 'destroyableWall') {
 					tiles[locx+i][locy] = new Tile(context, 'explosion', explImg[2][1], 84, 0, 16, 16, bomb.x+(16*i), bomb.y, 16, 16);
 					tiles[locx+i][locy].Draw();
+					player.score += 125;
+					updateHud();
 					explosionTiles.push(tiles[locx+i][locy]);
 					powerupTiles.push(tiles[locx+i][locy]);
 				}
@@ -468,6 +451,8 @@ function explodeBomb(bomb, player) {
 				if(tiles[locx-i][locy].Type == 'destroyableWall') {
 					tiles[locx-i][locy] = new Tile(context, 'explosion', explImg[4][1], 0, 0, 16, 16, bomb.x-(16*i), bomb.y, 16, 16);
 					tiles[locx-i][locy].Draw();
+					player.score += 125;
+					updateHud();
 					explosionTiles.push(tiles[locx-i][locy]);
 					powerupTiles.push(tiles[locx-i][locy]);
 				}
@@ -489,6 +474,8 @@ function explodeBomb(bomb, player) {
 				if(tiles[locx][locy-i].Type == 'destroyableWall') {
 					tiles[locx][locy-i] = new Tile(context, 'explosion', explImg[1][1], 0, 0, 16, 16, bomb.x, bomb.y-(16*i), 16, 16);
 					tiles[locx][locy-i].Draw();
+					player.score += 125;
+					updateHud();
 					explosionTiles.push(tiles[locx][locy-i]);
 					powerupTiles.push(tiles[locx][locy-i]);
 				}
@@ -510,6 +497,8 @@ function explodeBomb(bomb, player) {
 				if(tiles[locx][locy+i].Type == 'destroyableWall') {
 					tiles[locx][locy+i] = new Tile(context, 'explosion', explImg[3][1], 0, 84, 16, 16, bomb.x, bomb.y+(16*i), 16, 16);
 					tiles[locx][locy+i].Draw();
+					player.score += 125;
+					updateHud();
 					explosionTiles.push(tiles[locx][locy+i]);
 					powerupTiles.push(tiles[locx][locy+i]);
 				}
@@ -522,9 +511,9 @@ function explodeBomb(bomb, player) {
 	for(var i = 0; i < explosionTiles.length; i++) {
 		for (var j = 0; j < players.length; j++) {
 			if (explosionTiles[i].X == players[j].X && explosionTiles[i].Y == players[j].Y) {
-				players[j].lives--;
+				--players[j].lives;
 				if(player != players[j])
-					player.score += 10;
+					player.score += 1000;
 				if(players[j].lives == 0)
 					players[j].alive = false;
 			}
@@ -613,8 +602,11 @@ document.addEventListener('keydown', function(event) {
 					p1.Move('left');
 					checkPickup(p1);
 					drawPlayers();
-					if(checkFire(x1 -1, y1)) {
-						p1.lives--;
+					if(checkFire(x1 - 1, y1)) {
+						--p1.lives;
+						if (p1.lives == 0) {
+							p1.alive = false;
+						}
 					}
 				}
 			}
@@ -625,7 +617,10 @@ document.addEventListener('keydown', function(event) {
 					checkPickup(p1);
 					drawPlayers();
 					if(checkFire(x1 + 1, y1)) {
-						p1.lives--;
+						--p1.lives;
+						if (p1.lives == 0) {
+							p1.alive = false;
+						}
 					}
 				}
 			}
@@ -636,7 +631,10 @@ document.addEventListener('keydown', function(event) {
 					checkPickup(p1);
 					drawPlayers();
 					if(checkFire(x1, y1 - 1)) {
-						p1.lives--;
+						--p1.lives;
+						if (p1.lives == 0) {
+							p1.alive = false;
+						}
 					}
 				}
 			}
@@ -647,7 +645,10 @@ document.addEventListener('keydown', function(event) {
 					checkPickup(p1);
 					drawPlayers();
 					if(checkFire(x1, y1 + 1)) {
-						p1.lives--;
+						--p1.lives;
+						if (p1.lives == 0) {
+							p1.alive = false;
+						}
 					}
 				}
 			}
@@ -657,6 +658,12 @@ document.addEventListener('keydown', function(event) {
 					p2.Move('left');
 					checkPickup(p2);
 					drawPlayers();
+					if(checkFire(x2 - 1, y2)) {
+						--p2.lives;
+						if (p2.lives == 0) {
+							p2.alive = false;
+						}
+					}
 				}
 			}
 			else if(event.keyCode == 68) { // player 2 moving right
@@ -665,6 +672,12 @@ document.addEventListener('keydown', function(event) {
 					p2.Move('right');
 					checkPickup(p2);
 					drawPlayers();
+					if(checkFire(x2 + 1, y2)) {
+						--p2.lives;
+						if (p2.lives == 0) {
+							p2.alive = false;
+						}
+					}
 				}
 			}
 			else if(event.keyCode == 87) { // player 2 moving up
@@ -673,6 +686,12 @@ document.addEventListener('keydown', function(event) {
 					p2.Move('up');
 					checkPickup(p2);
 					drawPlayers();
+					if(checkFire(x2, y2 - 1)) {
+						--p2.lives;
+						if (p2.lives == 0) {
+							p2.alive = false;
+						}
+					}
 				}
 			}
 			else if(event.keyCode == 83) { // player 2 moving down
@@ -681,6 +700,12 @@ document.addEventListener('keydown', function(event) {
 					p2.Move('down');
 					checkPickup(p2);
 					drawPlayers();
+					if(checkFire(x2, y2 + 1)) {
+						--p2.lives;
+						if (p2.lives == 0) {
+							p2.alive = false;
+						}
+					}
 				}
 			}
 			// Player 1 bomb key
@@ -699,6 +724,8 @@ function checkPickup(player) {
 	var x = player.X/16, y = player.Y/16;
 	
 	if (tiles[x][y].Type === 'extra-bomb') {
+		player.score += 220;
+		updateHud();
 		++player.bombCount;
 		++player.maxBombCount;
 		clearPowerup(x, y, player);
@@ -719,6 +746,8 @@ function checkPickup(player) {
 		clearPowerup(x, y, player);
 	}
 	else if (tiles[x][y].Type === 'fire') {
+		player.score += 220;
+		updateHud();
 		player.bombSize++;
 		clearPowerup(x, y, player);
 	}
