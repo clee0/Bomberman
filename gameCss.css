@@ -42,6 +42,7 @@ background: -ms-linear-gradient( top left, white, black 25% );
 background: linear-gradient( top left, white, black 25% );
 text-shadow: 5px 5px 5px #FF0000;
 text-align: center;
+box-shadow: 5px 5px 5px #ADADAD;
 } 
 tr{
 border: 5px groove #0000FF;
@@ -57,6 +58,7 @@ background: -khtml-linear-gradient( top left, white, black 25% );
 background: -ms-linear-gradient( top left, white, black 25% );
 background: linear-gradient( top left, white, black 25% );
 border-radius:10px;
+box-shadow: 5px 5px 5px #ADADAD;
 }
 
 table#controls td,th {

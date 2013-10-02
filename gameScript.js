@@ -62,7 +62,11 @@ function checkGameTermination() {
 			livePlayers.push(players[i]);
 	}
 	
-	if(livePlayers.length == 0 || livePlayers.length == 1) {
+	if(livePlayers.length == 1) {
+		alert(livePlayers[0].name + ' wins by elimination');
+		gameEnded = true;
+	}
+	if(livePlayers.length == 0) {
 		var winnerIndex = -1;
 		var maxScore = 0;
 		for(var j = 0; j < players.length; j++) {
