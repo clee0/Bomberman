@@ -17,7 +17,7 @@ for (var i = 0; i < 13; i++) {
 }
 var players = new Array();
 var bombs = new Array();
-var types = new Array('extra-bomb', 'skate', 'kick', 'glove', 'fire', 'disease', 'crane');
+var types = new Array('extra-bomb','fire'/* 'skate', 'kick', 'glove', 'disease', 'crane'*/);
 
 var clock;
 var TO_RADIANS = Math.PI/180;
@@ -266,26 +266,9 @@ function startup() {
 		loadSmallClock();
 		loadMap1();
 		//drawRandomScores();
-		//startFakePowerups();
 	});
 	
 	gameStarted = true;
-}
-
-function startFakePowerups() {
-	// create powerup at x=1, y=2 on tile grid
-	createPowerup(1,2);
-	// create powerup at x=2, y=1 on tile grid
-	createPowerup(2,1);
-	createPowerup(3,1);
-	createPowerup(3,2);
-	createPowerup(3,3);
-	createPowerup(3,4);
-	createPowerup(3,5);
-	createPowerup(3,6);
-	createPowerup(3,7);
-	createPowerup(3,8);
-	createPowerup(3,9);
 }
 
 function drawNumber(number, player, type) {
@@ -397,9 +380,15 @@ function drawTiles() {
 
 function createPowerup(x, y) {
 	var index = Math.floor(Math.random() * types.length);
+	var offsetX;
 	var tileType = types[index]; // from stack overflow
+	console.log(types.length);
 
-	offsetX = 3 + (index * 17);
+	if (index === 0) {
+		offsetX = 3 + (0 * 17);
+	} else if (index === 1) {
+		offsetX = 3 + (4 * 17);
+	}
 	var tempTile = new Tile(context, tileType, powerupImg, offsetX, 3, 16, 16, x*16, y*16, 16, 16, powclock.Index);
 	tiles[x][y] = tempTile;
 	tiles[x][y].Draw();
@@ -439,7 +428,7 @@ function dropBomb(player) {
 function rollPowerup() {
 	// Creates a random number between 0-100
 	var rand = Math.floor(Math.random()*101);
-	if(rand < 30) {return true;}
+	if(rand < 5) {return true;}
 	return false;
 }
 	
