@@ -9,7 +9,6 @@ hudCanvas.style.border = "black 1px solid";
 
 var gameStarted = false;
 var gameEnded = false;
-var changedTiles = new Array(); // tiles that have been changed
 var explImg = new Array();
 var tiles = new Array(13); // all tiles in game
 for (var i = 0; i < 13; i++) {
@@ -51,9 +50,6 @@ var currentTime = 1;
 var timeBlocks = 0;
 var scores = new Array();
 
-//startup();
-
-// TODO: give names to players so we know who wins at the end?
 function checkGameTermination() {
 	// If only one player alive, that player wins
 	// If no players alive, draw
@@ -171,7 +167,7 @@ function updateSmallClock(imageNumber){
 	}
 }
 
-//use setInteval for game loop?
+
 clock = self.setInterval(function() {
 	if(gameStarted && !gameEnded) {
 		smallClockUpdate();
@@ -183,7 +179,7 @@ clock = self.setInterval(function() {
 
 function startup() {
     if (context) {
-    	// 13 x 13 tiles at 16 px each.. We could make this larger if we want
+    	// 13 x 13 tiles at 16 px each.
         canvas.width = (tiles.length*16).toString();
         canvas.height = (tiles[0].length*16).toString();
     }
@@ -246,10 +242,6 @@ function startup() {
 		clockmid.src = getTileSrc('Hud/clockmid.png',hudContext),
 		hudNumbers.src = getTileSrc('Hud/hudnumbers.jpg', hudContext),
 
-		// explImg[0].src = getTileSrc('bombs/bombcenter.png', context),
-		// explImg[1].src = getTileSrc('bombs/bombmid.png', context),
-		// explImg[2].src = getTileSrc('bombs/bombend.png', context),
-
 		explImg[0].src = getTileSrc('explosion/bombcenter.png', context),
 		explImg[1][0].src = getTileSrc('explosion/up/bombmid.png', context),
 		explImg[1][1].src = getTileSrc('explosion/up/bombend.png', context),
@@ -265,7 +257,6 @@ function startup() {
 		loadHud();
 		loadSmallClock();
 		loadMap1();
-		//drawRandomScores();
 	});
 	
 	gameStarted = true;
@@ -313,22 +304,24 @@ function drawNumber(number, player, type) {
 	}
 }
 
-function drawRandomScores() {
-	drawNumber(9, 'p1', 'kills');
-	drawNumber(0, 'p2', 'kills');
-	drawNumber(253605, 'p1', 'score');
-	drawNumber(999999999, 'p2', 'score');
-}
+//TODO: Reset HUD scores & Stuff when game restarts?
+
+// function drawRandomScores() {
+// 	drawNumber(9, 'p1', 'kills');
+// 	drawNumber(0, 'p2', 'kills');
+// 	drawNumber(253605, 'p1', 'score');
+// 	drawNumber(999999999, 'p2', 'score');
+// }
 
 function loadHud() {
 	// draw main hud image:
 	hudContext.drawImage(twoHudImg, 0, 0, 256, 32, 0, 0, 256,32);
 
 	// draw player kills:
-	drawNumber(3, 'p1', 'kills');
-	drawNumber(7, 'p2', 'kills');
-	drawNumber(6, 'p1', 'score');
-	drawNumber(8, 'p2', 'score');
+	// drawNumber(3, 'p1', 'kills');
+	// drawNumber(7, 'p2', 'kills');
+	// drawNumber(6, 'p1', 'score');
+	// drawNumber(8, 'p2', 'score');
 
 	// player 1 x score: [48][55][62][69][76][83][90][97][104]
 	// player 2 x score: [184][191][198][205][212][219][226][233][240]
@@ -350,14 +343,9 @@ function loadSmallClock() {
 }
 
 function addPlayers() {
-	// add Player 1
 	players[0] = new Player(context, player1Img, 18, 1, 16, 23, 1*16, 1*16, 16, 16, 'Player 1');
 	players[1] = new Player(context, player2Img, 18, 1, 16, 23, 11*16, 11*16, 16, 16, 'Player 2');
 	drawPlayers();
-}
-
-function next() {
-	// debugger;
 }
 
 function drawPlayers() {
@@ -366,7 +354,6 @@ function drawPlayers() {
 			players[i].Draw();
 		}
 	}
-	next();
 }
 
 function drawTiles() {
@@ -381,7 +368,7 @@ function drawTiles() {
 function createPowerup(x, y) {
 	var index = Math.floor(Math.random() * types.length);
 	var offsetX;
-	var tileType = types[index]; // from stack overflow
+	var tileType = types[index];
 	console.log(types.length);
 
 	if (index === 0) {
@@ -396,7 +383,6 @@ function createPowerup(x, y) {
 	var Name = 'powClock' + powclock.Index;
 	++powclock.Index;
 	powclock[Name] = setInterval(function() {
-		//console.log('powerup',tempTile.ClockIndex,'still alive');
 		tiles[x][y].shiftImg();
 	}, 400);
 }
@@ -416,7 +402,6 @@ function dropBomb(player) {
 		var Name = 'bombClock' + bombclocks.Index;
 		++bombclocks.Index;
 		bombclocks[Name] = setInterval(function() {
-			//console.log('bomb',tempBomb.ClockIndex,'still alive');
 			if (tempBomb.countdown()) {
 				explodeBomb(tempBomb, player);
 			}
@@ -424,7 +409,7 @@ function dropBomb(player) {
 	}
 }
 
-// 30% to return true (checking if wall drops powerup)
+// 5% to return true (checking if wall drops powerup)
 function rollPowerup() {
 	// Creates a random number between 0-100
 	var rand = Math.floor(Math.random()*101);
@@ -565,7 +550,7 @@ function explodeBomb(bomb, player) {
 
 function getTileSrc(imageSrc, ctx) {
 	var index = ctx.canvas.baseURI.indexOf('index.html');
-	fileName = ctx.canvas.baseURI.slice(0 , index); // includes final '/' but excludes 'index.html'
+	fileName = ctx.canvas.baseURI.slice(0 , index);
 	fileName += 'images/' + imageSrc;
 	return fileName;
 };
@@ -613,11 +598,6 @@ function loadMap1() {
 	}
 	drawTiles();
 }
-
-// function player(locx, locy) {
-// 	this.locx = locx;
-// 	this.locy = locy;
-// }
 
 document.addEventListener('keydown', function(event) {
 	if(gameStarted) {
@@ -719,29 +699,36 @@ function checkPickup(player) {
 	var x = player.X/16, y = player.Y/16;
 	
 	if (tiles[x][y].Type === 'extra-bomb') {
-		//console.log('prev. bomb count:', player.bombCount);
 		++player.bombCount;
 		++player.maxBombCount;
 		clearPowerup(x, y, player);
-		//console.log('new bomb count:', player.bombCount);
-	} else if (tiles[x][y].Type === 'skate') {
+	}
+	// For use in later versions of game:
+	else if (tiles[x][y].Type === 'skate') {
 		// speed increase?
 		clearPowerup(x, y, player);
-	} else if (tiles[x][y].Type === 'kick') {
-		// console.log('prev. canKick:', player.canKick);
+	}
+	// For use in later versions of game:
+	else if (tiles[x][y].Type === 'kick') {
 		player.canKick = true;
 		clearPowerup(x, y, player);
-		// console.log('now canKick:', player.canKick);
-	} else if (tiles[x][y].Type === 'glove') {
+	}
+	// For use in later versions of game:
+	else if (tiles[x][y].Type === 'glove') {
 		// not sure what this does
 		clearPowerup(x, y, player);
-	} else if (tiles[x][y].Type === 'fire') {
+	}
+	else if (tiles[x][y].Type === 'fire') {
 		player.bombSize++;
 		clearPowerup(x, y, player);
-	} else if (tiles[x][y].Type === 'disease') {
+	}
+	// For use in later versions of game:
+	else if (tiles[x][y].Type === 'disease') {
 		// disease effect for player?
 		clearPowerup(x, y, player);
-	} else if (tiles[x][y].Type === 'crane') {
+	}
+	// For use in later versions of game:
+	else if (tiles[x][y].Type === 'crane') {
 		// allow player to pickup other bombs?
 		player.canPickup = true;
 		clearPowerup(x, y, player);
