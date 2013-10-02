@@ -1,12 +1,13 @@
+<!DOCTYPE html>
+
 <!--
 	1st Team Assignment
 	CSCI 445
 -->
-<!DOCTYPE html>
 <html>
 <head>
-<body bgcolor="#E6E6FA">
 	<title>Bomberman</title>
+	<meta charset="utf-8">
 	<link rel="stylesheet" type="text/css" href="gameCss.css">
 	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
@@ -40,21 +41,20 @@
 			</div>
 		</td>
 		<td>
-	<div class="playerControls" >
-                <table border ="3">
+                <table id="controls">
 					<tr>
-						<TH COLSPAN="3">
-							<H3><BR>Play Controls for Bomberman</H3>
-						</TH>
+						<th colspan="3">
+							Play Controls for Bomberman
+						</th>
 					</tr>
                     <tr>
-                        <td  width="120%">
+                        <td>
                             Controls
                         </td>
-                        <td width="120%">
+                        <td>
                             Player One
                         </td>
-                        <td width="120%">
+                        <td>
                             Player Two
                         </td>
                     </tr>
@@ -117,14 +117,13 @@
 				</td>
 				</tr>
 				</table>
-            </div>
 	<!-- <button onclick="stopClock()">Stop Game Loop!</button> -->
 	<!-- <footer>
         <p><a href="index.html">home</a> | <a href="about_us.html">about us</a> | <a href="contact.html">contact</a></p>
     </footer> -->
-    <script language="javascript" type="text/javascript" src="Player.js"></script>
-    <script language="javascript" type="text/javascript" src="Tile.js"></script>
-	<script language="javascript" type="text/javascript" src="Bomb.js"></script>
-	<script language="javascript" type="text/javascript" src="gameScript.js"></script>
+    <script type="text/javascript" src="Player.js"></script>
+    <script type="text/javascript" src="Tile.js"></script>
+	<script type="text/javascript" src="Bomb.js"></script>
+	<script type="text/javascript" src="gameScript.js"></script>
 </body>
 </html>

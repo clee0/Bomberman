@@ -1,3 +1,7 @@
+body {
+	background-color: #E6E6FA;
+}
+
 div#game-canvas-container, div#hud-canvas-container {
 	width: 100%;
 	text-align: center;
@@ -15,7 +19,7 @@ div#dialog{
 }
 
 table#format{
-margin-left: 396px;
+	margin: auto;
     text-align: center;
 }
 
@@ -43,7 +47,7 @@ tr{
 border: 5px groove #0000FF;
 }
 
-.playerControls{
+table#controls{
 color: white;
 border: 5px groove #0000FF;
 background: -moz-linear-gradient( top left, white, black 25% );
@@ -55,3 +59,13 @@ background: linear-gradient( top left, white, black 25% );
 border-radius:10px;
 }
 
+table#controls td,th {
+border: 1px solid #0000FF;
+width:120%;
+}
+
+table#controls th {
+padding: 10px;
+font-weight: bold;
+font-size: 120%;
+}
