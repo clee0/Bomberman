@@ -502,8 +502,8 @@ function explodeBomb(bomb, player) {
 		}
 		if(!hitUp && (locy-i) >= 0) {
 			if(!tiles[locx][locy-i].isSolid) {
-				if (tiles[locx][locy-1].isPowerup)
-					clearPowerup(locx, locy-1, player);
+				if (tiles[locx][locy-i].isPowerup)
+					clearPowerup(locx, locy-i, player);
 				if(i == bomb.player.bombSize - 1)
 					tiles[locx][locy-i] = new Tile(context, 'explosion', explImg[1][1], 0, 0, 16, 16, bomb.x, bomb.y-(16*i), 16, 16);
 				else
@@ -523,8 +523,8 @@ function explodeBomb(bomb, player) {
 		}
 		if(!hitDown && (locy+i) <= 12) {
 			if(!tiles[locx][locy+i].isSolid) {
-				if (tiles[locx][locy+1].isPowerup)
-					clearPowerup(locx, locy+1, player);
+				if (tiles[locx][locy+i].isPowerup)
+					clearPowerup(locx, locy+i, player);
 				if(i == bomb.player.bombSize - 1)
 					tiles[locx][locy+i] = new Tile(context, 'explosion', explImg[3][1], 0, 84, 16, 16, bomb.x, bomb.y+(16*i), 16, 16);
 				else
