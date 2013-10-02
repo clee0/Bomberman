@@ -119,6 +119,7 @@ function smallClockUpdate(){
 		else if(checkTie == players.length)
 			alert('Game over by timeout: score is tied');
 		clearInterval(clock);
+		gameEnded = true;
 
 	}
 
