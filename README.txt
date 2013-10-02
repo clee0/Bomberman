@@ -2,6 +2,8 @@ CSCI445 Team Assignment 1
 
 Project name: Bomberman
 
+Recommended Browser: Chrome
+
 Team members:
 -Alex Beaman
 -Christopher Lee
