@@ -76,7 +76,10 @@ function checkGameTermination() {
 		if(winnerIndex >= 0)
 			alert(players[winnerIndex].name + ' wins with ' + players[winnerIndex].score.toString());
 		else
-			alert('Game is a draw');
+			if (livePlayers.length == 1)
+				alert(livePlayers[0].name + ' wins');
+			else
+				alert('Game is a draw');
 		gameEnded = true;
 	}
 }
