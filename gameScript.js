@@ -96,7 +96,29 @@ function smallClockUpdate(){
 
 	if (timeBlocks === 28) {
 		// GAME ENDS BY TIME DELAY
-		alert('Game over by timeout');
+		
+		// Find player with highest score
+		var livePlayers = new Array();
+		for (var i = 0; i < players.length; i++) {
+			if(players[i].alive)
+				livePlayers.push(players[i]);
+		}
+		var winnerIndex = -1;
+		var maxScore = 0;
+		var checkTie = 0;
+		for(var j = 0; j < players.length; j++) {
+			if(players[j].score > maxScore) {
+				winnerIndex = j;
+				maxScore = players[j].score;
+			}
+			if(players[j].score == maxScore)
+				checkTie++;
+		}
+		
+		if(winnerIndex >= 0 && checkTie != players.length)
+			alert('Game over by timeout: ' + players[winnerIndex].name + ' wins');
+		else if(checkTie == players.length)
+			alert('Game over by timeout: score is tied');
 		clearInterval(clock);
 
 	}
