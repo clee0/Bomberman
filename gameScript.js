@@ -50,6 +50,8 @@ var currentTime = 1;
 var timeBlocks = 0;
 var scores = new Array();
 
+// TODO: Reset HUD scores & Stuff if / when game restarts?
+
 function checkGameTermination() {
 	// If only one player alive, that player wins
 	// If no players alive, draw
@@ -70,7 +72,7 @@ function checkGameTermination() {
 			}
 		}
 		if(winnerIndex >= 0)
-			alert(players[winnerIndex].name + ' wins with ' + players[winnerIndex].score.toString());
+			alert(players[winnerIndex].name + ' wins with score: ' + players[winnerIndex].score.toString());
 		else
 			if (livePlayers.length == 1)
 				alert(livePlayers[0].name + ' wins');
@@ -86,6 +88,7 @@ function smallClockUpdate(){
 
 	updateSmallClock(modTime);
 
+	// there are 28 blocks to be colored black before time ends
 	if (timeBlocks === 28) {
 		// GAME ENDS BY TIME DELAY
 		
@@ -108,7 +111,7 @@ function smallClockUpdate(){
 		}
 		
 		if(winnerIndex >= 0 && checkTie != players.length)
-			alert('Game over by timeout: ' + players[winnerIndex].name + ' wins');
+			alert('Game over by timeout! ' + players[winnerIndex].name + ' wins with score: ' + maxScore);
 		else if(checkTie == players.length)
 			alert('Game over by timeout: score is tied');
 		clearInterval(clock);
@@ -300,13 +303,9 @@ function drawNumber(number, player, type) {
 	}
 }
 
-//TODO: Reset HUD scores & Stuff when game restarts?
-
 function loadHud() {
 	// draw main hud image:
 	hudContext.drawImage(twoHudImg, 0, 0, 256, 32, 0, 0, 256,32);
-	// player 1 x score: [48][55][62][69][76][83][90][97][104]
-	// player 2 x score: [184][191][198][205][212][219][226][233][240]
 
 }
 
@@ -394,7 +393,7 @@ function dropBomb(player) {
 function rollPowerup() {
 	// Creates a random number between 0-100
 	var rand = Math.floor(Math.random()*101);
-	if(rand < 5) {return true;}
+	if(rand < 7) {return true;}
 	return false;
 }
 	
@@ -524,6 +523,9 @@ function explodeBomb(bomb, player) {
 		// Reset explosion tiles to empty
 		for(var i = 0; i < explosionTiles.length; i++) {
 			var x = explosionTiles[i].X, y = explosionTiles[i].Y;
+			if (tiles[x/16][y/16].Type == 'extra-bomb' || tiles[x/16][y/16].Type == 'fire') {
+				clearPowerClock(x/16, y/16);
+			}
 			tiles[x/16][y/16] = new Tile(context, 'empty', emptyImg, 52, 1, 16, 16, x, y, 16, 16);
 			tiles[x/16][y/16].Draw();
 			drawPlayers();
@@ -758,7 +760,7 @@ function checkPickup(player) {
 	}
 	// For use in later versions of game:
 	else if (tiles[x][y].Type === 'crane') {
-		// allow player to pickup other bombs?
+		// allow player to pickup other player's bombs?
 		player.canPickup = true;
 		clearPowerup(x, y, player);
 	}
@@ -770,10 +772,14 @@ function clearBombClock(bomb) {
 }
 
 function clearPowerup(x, y, player) {
-	clearInterval(powclock['powClock' + tiles[x][y].ClockIndex]);
+	clearPowerClock(x,y);
 	tiles[x][y] = new Tile(context, 'empty', emptyImg, 52, 1, 16, 16, player.X, player.Y, 16, 16);
 	tiles[x][y].Draw();
 	player.Draw();
+}
+
+function clearPowerClock(x, y) {
+	clearInterval(powclock['powClock' + tiles[x][y].ClockIndex]);
 }
 
 function checkWall(x, y) {
