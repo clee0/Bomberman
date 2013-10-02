@@ -433,11 +433,11 @@ function explodeBomb(bomb, player) {
 	explosionTiles.push(tiles[locx][locy]);
 	var hitLeft = false, hitRight = false, hitUp = false, hitDown = false;
 	for(var i = 1; i <= bomb.player.bombSize - 1; i++) {
-		if(!hitRight) {
+		if(!hitRight && (locx+i) <= 12) {
 			if(!tiles[locx+i][locy].isSolid) {
 				if (tiles[locx+i][locy].isPowerup)
 					clearPowerup(locx+i, locy, player);
-				if(i = bomb.player.bombSize - 1)
+				if(i == bomb.player.bombSize - 1)
 					tiles[locx+i][locy] = new Tile(context, 'explosion', explImg[2][1], 84, 0, 16, 16, bomb.x+(16*i), bomb.y, 16, 16);
 				else
 					tiles[locx+i][locy] = new Tile(context, 'explosion', explImg[2][0], 84, 0, 16, 16, bomb.x+(16*i), bomb.y, 16, 16);
@@ -454,11 +454,11 @@ function explodeBomb(bomb, player) {
 				hitRight = true;
 			}
 		}
-		if(!hitLeft) {
+		if(!hitLeft && (locx-i) >= 0) {
 			if(!tiles[locx-i][locy].isSolid) {
 				if (tiles[locx-i][locy].isPowerup)
 					clearPowerup(locx-i, locy, player);
-				if(i = bomb.player.bombSize - 1)
+				if(i == bomb.player.bombSize - 1)
 					tiles[locx-i][locy] = new Tile(context, 'explosion', explImg[4][1], 0, 0, 16, 16, bomb.x-(16*i), bomb.y, 16, 16);
 				else
 					tiles[locx-i][locy] = new Tile(context, 'explosion', explImg[4][0], 0, 0, 16, 16, bomb.x-(16*i), bomb.y, 16, 16);
@@ -475,11 +475,11 @@ function explodeBomb(bomb, player) {
 				hitLeft = true;
 			}
 		}
-		if(!hitUp) {
+		if(!hitUp && (locy-i) >= 0) {
 			if(!tiles[locx][locy-i].isSolid) {
 				if (tiles[locx][locy-1].isPowerup)
 					clearPowerup(locx, locy-1, player);
-				if(i = bomb.player.bombSize - 1)
+				if(i == bomb.player.bombSize - 1)
 					tiles[locx][locy-i] = new Tile(context, 'explosion', explImg[1][1], 0, 0, 16, 16, bomb.x, bomb.y-(16*i), 16, 16);
 				else
 					tiles[locx][locy-i] = new Tile(context, 'explosion', explImg[1][0], 0, 0, 16, 16, bomb.x, bomb.y-(16*i), 16, 16);
@@ -496,11 +496,11 @@ function explodeBomb(bomb, player) {
 				hitUp = true;
 			}
 		}
-		if(!hitDown) {
+		if(!hitDown && (locy+i) <= 12) {
 			if(!tiles[locx][locy+i].isSolid) {
 				if (tiles[locx][locy+1].isPowerup)
 					clearPowerup(locx, locy+1, player);
-				if(i = bomb.player.bombSize - 1)
+				if(i == bomb.player.bombSize - 1)
 					tiles[locx][locy+i] = new Tile(context, 'explosion', explImg[3][1], 0, 84, 16, 16, bomb.x, bomb.y+(16*i), 16, 16);
 				else
 					tiles[locx][locy+i] = new Tile(context, 'explosion', explImg[3][0], 0, 84, 16, 16, bomb.x, bomb.y+(16*i), 16, 16);
@@ -688,11 +688,13 @@ document.addEventListener('keydown', function(event) {
 
 function checkPickup(player) {
 	var x = player.X/16, y = player.Y/16;
+	
 	if (tiles[x][y].Type === 'extra-bomb') {
-		// console.log('prev. bomb count:', player.bombCount);
+		//console.log('prev. bomb count:', player.bombCount);
 		++player.bombCount;
+		++player.maxBombCount;
 		clearPowerup(x, y, player);
-		// console.log('new bomb count:', player.bombCount);
+		//console.log('new bomb count:', player.bombCount);
 	} else if (tiles[x][y].Type === 'skate') {
 		// speed increase?
 		clearPowerup(x, y, player);
@@ -705,7 +707,6 @@ function checkPickup(player) {
 		// not sure what this does
 		clearPowerup(x, y, player);
 	} else if (tiles[x][y].Type === 'fire') {
-		// increase blast length?
 		player.bombSize++;
 		clearPowerup(x, y, player);
 	} else if (tiles[x][y].Type === 'disease') {
@@ -713,6 +714,7 @@ function checkPickup(player) {
 		clearPowerup(x, y, player);
 	} else if (tiles[x][y].Type === 'crane') {
 		// allow player to pickup other bombs?
+		player.canPickup = true;
 		clearPowerup(x, y, player);
 	}
 }

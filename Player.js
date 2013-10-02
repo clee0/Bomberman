@@ -7,11 +7,13 @@ Player = function(ctx, imageObj, imgoffsetx, imgoffsety, imgwx, imgwy, x, y, new
 	this.Context = ctx;  this.imageObj = imageObj
 	
 	// default values - can be changed by powerups
+	this.maxBombCount = 1;
 	this.bombCount = 1;
 	this.bombSize = 2;
 	this.bombTime = 3;
 	this.canRemoteDetonate = false;
 	this.canKick = false;
+	this.canPickup = false;
 	this.alive = true;
 	
 	this.lives = 3;

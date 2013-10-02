@@ -13,6 +13,8 @@ Updates from each day / commit:
 -Players can die (no longer draws player when dead)
 -Game ends when 0 or 1 players remaining (and congratulates the winner)
 -Keyboard input disabled when game ends
+-Lives and scores update, work as intended
+-Attempted fix of IndexOutofBounds error with bomb explosions
 
 9-30-13: [last update of the night]:
 (alex)
