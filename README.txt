@@ -10,6 +10,7 @@ Team members:
 CSS3 features used:
 -Rounded borders
 -Box shadows
+-text shadow effects
 -Color gradients
 
 JavaScript libraries used:
@@ -21,3 +22,6 @@ Other nifty features (that justify the 100 point mark)
 -Lots of images to improve aesthetic appeal (scoreboard, spritesheets)
 -Powerups and scoring make for more interesting gameplay
 -Several sets of asynchronous clocks (game clock, bomb detonation clock, powerup clock, etc)
+
+Sprites:
+Sprites from Thespritersresource.com, copyright nintendo, recolored by Kyle Tucker
