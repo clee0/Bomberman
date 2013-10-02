@@ -538,6 +538,7 @@ function explodeBomb(bomb, player) {
 			var x = explosionTiles[i].X, y = explosionTiles[i].Y;
 			tiles[x/16][y/16] = new Tile(context, 'empty', emptyImg, 52, 1, 16, 16, x, y, 16, 16);
 			tiles[x/16][y/16].Draw();
+			drawPlayers();
 		}
 		
 		// Check destroyed walls for powerups
@@ -605,83 +606,97 @@ function loadMap1() {
 // }
 
 document.addEventListener('keydown', function(event) {
-	var p1 = players[0];
-	var x1 = p1.X/16, y1 = p1.Y/16;
+	if(gameStarted) {
+		var p1 = players[0];
+		var x1 = p1.X/16, y1 = p1.Y/16;
 
-	var p2 = players[1];
-	var x2 = p2.X/16, y2 = p2.Y/16;
-	if(!gameEnded) {
-		if(event.keyCode == 37) {
-			if (!checkWall(x1 - 1, y1)) { // p1 move left
-				tiles[x1][y1].Draw();
-				p1.Move('left');
-				checkPickup(p1);
-				drawPlayers();
+		var p2 = players[1];
+		var x2 = p2.X/16, y2 = p2.Y/16;
+		if(!gameEnded) {
+			if(event.keyCode == 37) {
+				if (!checkWall(x1 - 1, y1)) { // p1 move left
+					tiles[x1][y1].Draw();
+					p1.Move('left');
+					checkPickup(p1);
+					drawPlayers();
+					if(checkFire(x1 -1, y1)) {
+						p1.lives--;
+					}
+				}
 			}
-		}
-		else if(event.keyCode == 39) {
-			if (!checkWall(x1 + 1, y1)) { // p1 move right
-				tiles[x1][y1].Draw();
-				p1.Move('right');
-				checkPickup(p1);
-				drawPlayers();
+			else if(event.keyCode == 39) {
+				if (!checkWall(x1 + 1, y1)) { // p1 move right
+					tiles[x1][y1].Draw();
+					p1.Move('right');
+					checkPickup(p1);
+					drawPlayers();
+					if(checkFire(x1 + 1, y1)) {
+						p1.lives--;
+					}
+				}
 			}
-		}
-		else if(event.keyCode == 38) {
-			if (!checkWall(x1, y1 - 1)) { // p1 move up
-				tiles[x1][y1].Draw();
-				p1.Move('up');
-				checkPickup(p1);
-				drawPlayers();
+			else if(event.keyCode == 38) {
+				if (!checkWall(x1, y1 - 1)) { // p1 move up
+					tiles[x1][y1].Draw();
+					p1.Move('up');
+					checkPickup(p1);
+					drawPlayers();
+					if(checkFire(x1, y1 - 1)) {
+						p1.lives--;
+					}
+				}
 			}
-		}
-		else if(event.keyCode == 40) {
-			if (!checkWall(x1, y1 + 1)) { // p1 move down
-				tiles[x1][y1].Draw();
-				p1.Move('down');
-				checkPickup(p1);
-				drawPlayers();
+			else if(event.keyCode == 40) {
+				if (!checkWall(x1, y1 + 1)) { // p1 move down
+					tiles[x1][y1].Draw();
+					p1.Move('down');
+					checkPickup(p1);
+					drawPlayers();
+					if(checkFire(x1, y1 + 1)) {
+						p1.lives--;
+					}
+				}
 			}
-		}
-		else if(event.keyCode == 65) { // player 2 moving left
-			if (!checkWall(x2-1, y2)) {
-				tiles[x2][y2].Draw();
-				p2.Move('left');
-				checkPickup(p2);
-				drawPlayers();
+			else if(event.keyCode == 65) { // player 2 moving left
+				if (!checkWall(x2-1, y2)) {
+					tiles[x2][y2].Draw();
+					p2.Move('left');
+					checkPickup(p2);
+					drawPlayers();
+				}
 			}
-		}
-		else if(event.keyCode == 68) { // player 2 moving right
-			if (!checkWall(x2+1, y2)) {
-				tiles[x2][y2].Draw();
-				p2.Move('right');
-				checkPickup(p2);
-				drawPlayers();
+			else if(event.keyCode == 68) { // player 2 moving right
+				if (!checkWall(x2+1, y2)) {
+					tiles[x2][y2].Draw();
+					p2.Move('right');
+					checkPickup(p2);
+					drawPlayers();
+				}
 			}
-		}
-		else if(event.keyCode == 87) { // player 2 moving up
-			if (!checkWall(x2, y2-1)) {
-				tiles[x2][y2].Draw();
-				p2.Move('up');
-				checkPickup(p2);
-				drawPlayers();
+			else if(event.keyCode == 87) { // player 2 moving up
+				if (!checkWall(x2, y2-1)) {
+					tiles[x2][y2].Draw();
+					p2.Move('up');
+					checkPickup(p2);
+					drawPlayers();
+				}
 			}
-		}
-		else if(event.keyCode == 83) { // player 2 moving down
-			if (!checkWall(x2, y2+1)) {
-				tiles[x2][y2].Draw();
-				p2.Move('down');
-				checkPickup(p2);
-				drawPlayers();
+			else if(event.keyCode == 83) { // player 2 moving down
+				if (!checkWall(x2, y2+1)) {
+					tiles[x2][y2].Draw();
+					p2.Move('down');
+					checkPickup(p2);
+					drawPlayers();
+				}
 			}
-		}
-		// Player 1 bomb key
-		else if(event.keyCode == 16 && players[0].alive) { // shift key
-			dropBomb(p1);
-		}
-		// Player 2 bomb key
-		else if(event.keyCode == 32 && players[1].alive) { // space key
-			dropBomb(p2);
+			// Player 1 bomb key
+			else if(event.keyCode == 16 && players[0].alive) { // shift key
+				dropBomb(p1);
+			}
+			// Player 2 bomb key
+			else if(event.keyCode == 32 && players[1].alive) { // space key
+				dropBomb(p2);
+			}
 		}
 	}
 });
@@ -733,6 +748,13 @@ function clearPowerup(x, y, player) {
 
 function checkWall(x, y) {
 	if (tiles[x][y].isSolid) {
+		return true;
+	}
+	return false;
+}
+
+function checkFire(x, y) {
+	if (tiles[x][y].Type == 'explosion') {
 		return true;
 	}
 	return false;
